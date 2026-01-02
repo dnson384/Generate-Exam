@@ -3,7 +3,7 @@ import useDocxUpload from "@/presentation/hooks/UploadFile/useUploadFile";
 import Image from "next/image";
 
 export default function Home() {
-  const { hiddenFileInput, handleInputClick, handleSelectedFile } =
+  const { resultHTML, hiddenFileInput, handleInputClick, handleSelectedFile } =
     useDocxUpload();
   return (
     <>
@@ -27,6 +27,11 @@ export default function Home() {
           </label>
         </div>
       </div>
+      {resultHTML && (
+        <>
+          <div dangerouslySetInnerHTML={{ __html: resultHTML }}></div>
+        </>
+      )}
     </>
   );
 }

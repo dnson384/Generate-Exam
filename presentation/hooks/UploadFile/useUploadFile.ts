@@ -1,8 +1,11 @@
+"use client";
 import { uploadDocxFile } from "@/presentation/services/uploadFile..service";
 import { useState, useRef, ChangeEvent } from "react";
 
 export default function useDocxUpload() {
   const hiddenFileInput = useRef<HTMLInputElement | null>(null);
+  const [resultHTML, setResultHTML] = useState<string | null>(null);
+
   const handleInputClick = () => {
     hiddenFileInput.current?.click();
   };
@@ -15,12 +18,18 @@ export default function useDocxUpload() {
       const formData = new FormData();
       formData.append("file", file);
       const data = await uploadDocxFile(formData);
-      console.log(data);
+
+      // if (data) {
+      //   setResultHTML(data);
+      // }
     } catch (err) {
       console.error(err);
+    } finally {
+      event.target.value = "";
     }
   };
   return {
+    resultHTML,
     hiddenFileInput,
     handleInputClick,
     handleSelectedFile,
