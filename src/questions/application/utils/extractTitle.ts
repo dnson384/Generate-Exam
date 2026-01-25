@@ -1,8 +1,7 @@
 import { PandocEleOutput } from '../dto/pandocOutput';
 
-export default function ExtractHeader(content: any[]) {
-  const headerLevel = content[0];
-  const rawText: string = content[2].reduce(
+export default function ExtractTitle(content: any[]) {
+  const rawText: string = content.reduce(
     (text: string, cur: PandocEleOutput) => {
       if (cur.t === 'Str') text += cur.c;
       else if (cur.t === 'Space') text += ' ';
@@ -11,9 +10,5 @@ export default function ExtractHeader(content: any[]) {
     },
     '',
   );
-
-  return {
-    level: headerLevel,
-    text: rawText.trim(),
-  };
+  return rawText;
 }

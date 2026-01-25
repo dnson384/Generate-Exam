@@ -5,7 +5,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { DocumentService } from '../application/import-docx.usecase';
+import { DocumentService } from '../application/importDocx.usecase';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('document')
