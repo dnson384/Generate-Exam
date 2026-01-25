@@ -4,9 +4,9 @@ export interface ExtractedOptionsData {
 }
 
 export interface ExtractedData {
-  type: string;
   level: string;
   section: string;
+  require: string[];
   question: {
     template: string;
     variables: {
@@ -14,5 +14,5 @@ export interface ExtractedData {
       image: string[];
     };
   };
-  options?: ExtractedOptionsData[];
+  options: ExtractedOptionsData[];
 }

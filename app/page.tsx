@@ -1,6 +1,5 @@
 "use client";
 import useDocxUpload from "@/presentation/hooks/UploadFile/useUploadFile";
-import Image from "next/image";
 
 export default function Home() {
   const { resultHTML, hiddenFileInput, handleInputClick, handleSelectedFile } =
@@ -8,7 +7,7 @@ export default function Home() {
   return (
     <>
       <div className="fixed inset-0 flex justify-center items-center">
-        <div className="flex gap-2 bg-indigo-100 w-fit px-4 py-2 rounded-full cursor-pointer">
+        <div className="flex gap-2 bg-yellow-200 w-fit px-4 py-2 rounded-full cursor-pointer">
           <input
             ref={hiddenFileInput}
             type="file"
@@ -21,7 +20,7 @@ export default function Home() {
 
           <label
             htmlFor="docx-input"
-            className="text-indigo-500 cursor-pointer"
+            className="text-blue-600 font-bold cursor-pointer"
           >
             Chọn tài liệu Word (.docx)
           </label>
