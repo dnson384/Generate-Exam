@@ -18,9 +18,9 @@ export class QuestionEntity {
   id?: string;
   chapter: string;
   lesson: string;
-  category: string;
-  level: string;
-  learningOutcome: string[];
+  exerciseType: string;
+  difficultyLevel: string;
+  learningOutcomes: string[];
   questionType: string;
   question: QuestionContent;
   options: OptionsData[];
@@ -29,7 +29,7 @@ export class QuestionEntity {
 
   constructor(props: Partial<QuestionEntity>) {
     Object.assign(this, props);
-    if (!this.learningOutcome) this.learningOutcome = [];
+    if (!this.learningOutcomes) this.learningOutcomes = [];
     if (!this.options) this.options = [];
     if (!this.question) {
       this.question = { template: '', variables: { math: {}, image: {} } };

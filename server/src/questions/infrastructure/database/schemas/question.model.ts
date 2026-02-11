@@ -52,13 +52,13 @@ export class Questions {
   lesson: string;
 
   @Prop({ required: true })
-  category: string;
+  exerciseType: string;
 
   @Prop({ required: true })
-  level: string;
+  difficultyLevel: string;
 
   @Prop({ type: [String], default: [] })
-  learningOutcome: string[];
+  learningOutcomes: string[];
 
   @Prop({ required: true })
   questionType: string;

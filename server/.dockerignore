@@ -1,0 +1,12 @@
+# Ignore version control
+.git
+
+# Ignore locally installed dependencies
+node_modules
+
+# Ignore logs and temporary files
+npm-debug.log
+*.log
+
+# Ignore environment files
+.env
