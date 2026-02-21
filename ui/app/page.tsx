@@ -1,36 +1,26 @@
 "use client";
-import useDocxUpload from "@/presentation/hooks/UploadFile/useUploadFile";
+import useDashboard from "@/presentation/hooks/Dashboard/useDashboard";
 
 export default function Home() {
-  const { resultHTML, hiddenFileInput, handleInputClick, handleSelectedFile } =
-    useDocxUpload();
+  const { redirect } = useDashboard();
   return (
     <>
       <div className="fixed inset-0 flex justify-center items-center">
-        <div className="flex gap-2 bg-yellow-200 w-fit px-4 py-2 rounded-full cursor-pointer">
-          <input
-            ref={hiddenFileInput}
-            type="file"
-            id="docx-input"
-            accept=".docx, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            className="hidden"
-            onClick={handleInputClick}
-            onChange={handleSelectedFile}
-          />
-
-          <label
-            htmlFor="docx-input"
-            className="text-blue-600 font-bold cursor-pointer"
-          >
-            Chọn tài liệu Word (.docx)
-          </label>
-        </div>
+        <button
+          id="generate-practice"
+          className="bg-yellow-200 px-4 py-2 rounded-full text-blue-600 font-bold cursor-pointer"
+          onClick={(e) => redirect(e)}
+        >
+          Tạo đề ôn tập
+        </button>
+        <button
+          id="upload"
+          className="bg-yellow-200 px-4 py-2 rounded-full text-blue-600 font-bold cursor-pointer"
+          onClick={(e) => redirect(e)}
+        >
+          Tải lên câu hỏi
+        </button>
       </div>
-      {resultHTML && (
-        <>
-          <div dangerouslySetInnerHTML={{ __html: resultHTML }}></div>
-        </>
-      )}
     </>
   );
 }

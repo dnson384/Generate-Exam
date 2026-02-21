@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
-, "presentation/services/uploadFile..service.ts"  ],
+    "**/*.mts",
+    "presentation/services/uploadFile.service.ts"
+  ],
   "exclude": ["node_modules"]
 }

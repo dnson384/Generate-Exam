@@ -1,4 +1,3 @@
-import { ExtractedData } from "@/domain/entities/document.entity";
 import { IUploadDocxFileRepository } from "@/domain/repositories/IUploadFileRepository";
 
 export class uploadDocxFileUsecase {
@@ -6,7 +5,7 @@ export class uploadDocxFileUsecase {
     private readonly uploadDocxFileRepository: IUploadDocxFileRepository
   ) {}
 
-  async execute(file: FormData): Promise<ExtractedData[]> {
+  async execute(file: FormData): Promise<boolean> {
     return this.uploadDocxFileRepository.uploadDocxFile(file);
   }
 }

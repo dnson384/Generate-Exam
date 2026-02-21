@@ -1,5 +1,5 @@
 "use client";
-import { uploadDocxFile } from "@/presentation/services/uploadFile..service";
+import { uploadDocxFile } from "@/presentation/services/uploadFile.service";
 import { useState, useRef, ChangeEvent } from "react";
 
 export default function useDocxUpload() {

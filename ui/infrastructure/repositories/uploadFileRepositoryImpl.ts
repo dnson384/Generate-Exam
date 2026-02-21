@@ -1,4 +1,3 @@
-import { ExtractedData } from "@/domain/entities/document.entity";
 import { IUploadDocxFileRepository } from "@/domain/repositories/IUploadFileRepository";
 import axios from "axios";
 
@@ -12,9 +11,9 @@ export class UploadDocxFileRepositoryImpl implements IUploadDocxFileRepository {
         : process.env.NEXT_PUBLIC_BACKEND_PROD_URL!;
   }
 
-  async uploadDocxFile(formData: FormData): Promise<ExtractedData[]> {
-    const { data } = await axios.post<Promise<ExtractedData[]>>(
-      `${this.baseUrl}/document/parse`,
+  async uploadDocxFile(formData: FormData): Promise<boolean> {
+    const { data } = await axios.post<Promise<boolean>>(
+      `${this.baseUrl}/importer/parse`,
       formData,
     );
     return data;
