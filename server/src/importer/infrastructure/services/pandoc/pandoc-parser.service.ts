@@ -3,21 +3,24 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { v4 } from 'uuid';
 import { PandocContents } from './dto/pandocOutput';
+
+// Import utils
 import ExtractHeader from './utils/extractHeader';
 import ExtractPara from './utils/extractPara';
 import ExtractOptions from './utils/extractOptions';
 import ExtractTitle from './utils/extractTitle';
-import { IFileParser } from './../../../application/ports/file-parser.port';
+
+import { IFileParser } from '../../../application/ports/file-parser.port';
+
+// Import DTO
 import {
-  OptionsData,
-  QuestionEntity,
-} from 'src/questions/domain/entities/question.entity';
-import {
-  LessonData,
-  CategoryEntity,
-} from 'src/questions/domain/entities/category.entity';
-import { ParsedDataOutput } from 'src/questions/application/dtos/parse-docx.dto';
-import { toArray } from 'rxjs';
+  OptionsDataImporterDTO,
+  NewQuestionImporterDTO,
+  LessonDataImporterDTO,
+  NewCategoryImporterDTO,
+} from 'src/importer/application/dtos/parse-docx.dto';
+import { ParsedDataOutput } from 'src/importer/application/dtos/parse-docx.dto';
+
 const pandoc = require('node-pandoc-promise');
 
 @Injectable()
@@ -52,7 +55,7 @@ export class PandocParserService implements IFileParser {
       const html: any[] = AST.blocks;
       const hasOptions = html.find((ele) => ele.t === 'BulletList');
 
-      const initialOption = (): OptionsData => ({
+      const initialOption = (): OptionsDataImporterDTO => ({
         template: '',
         variables: {
           math: {},
@@ -63,7 +66,7 @@ export class PandocParserService implements IFileParser {
       let initialQuestionRes = (
         chapter: string = '',
         lesson: string = '',
-      ): QuestionEntity => ({
+      ): NewQuestionImporterDTO => ({
         chapter: chapter,
         lesson: lesson,
         exerciseType: '',
@@ -80,7 +83,7 @@ export class PandocParserService implements IFileParser {
         options: [],
       });
 
-      let initialLessonData = (name: string): LessonData => ({
+      let initialLessonData = (name: string): LessonDataImporterDTO => ({
         name: name,
         exerciseTypes: [],
         difficultyLevels: [],
@@ -91,8 +94,8 @@ export class PandocParserService implements IFileParser {
       let chapter: string = '';
       let lesson: string = '';
 
-      const questionsRes: QuestionEntity[] = [];
-      const categoryRes: CategoryEntity = {
+      const questionsRes: NewQuestionImporterDTO[] = [];
+      const categoryRes: NewCategoryImporterDTO = {
         chapter: '',
         lessons: [],
       };

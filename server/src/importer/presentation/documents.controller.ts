@@ -4,12 +4,12 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ImportQuestionsUseCase } from '../application/import-questions.usecase';
+import { ImporterUseCase } from '../application/importer.usecase';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('document')
-export class DocumentController {
-  constructor(private readonly importUseCase: ImportQuestionsUseCase) {}
+export class ImporterController {
+  constructor(private readonly importUseCase: ImporterUseCase) {}
 
   @Post('parse')
   @UseInterceptors(FileInterceptor('file'))

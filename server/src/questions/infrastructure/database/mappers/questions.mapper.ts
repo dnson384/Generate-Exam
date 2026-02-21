@@ -1,5 +1,5 @@
 import { QuestionEntity } from 'src/questions/domain/entities/question.entity';
-import { Questions, QuestionsDocument } from '../schemas/question.model';
+import { Questions, QuestionsDocument } from '../models/questions.model';
 
 export class QuestionMapper {
   static toDomain(raw: QuestionsDocument): QuestionEntity {

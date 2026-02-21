@@ -1,5 +1,5 @@
-import { CategoryEntity } from 'src/questions/domain/entities/category.entity';
-import { Categories, CategoriesDocument } from '../schemas/category.model';
+import { Categories, CategoriesDocument } from '../models/category.model';
+import { CategoryEntity } from 'src/categories/domain/entities/category.entity';
 
 export class CategoryMapper {
   static toDomain(raw: CategoriesDocument): CategoryEntity {

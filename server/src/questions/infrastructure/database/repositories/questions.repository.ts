@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { QuestionEntity } from 'src/questions/domain/entities/question.entity';
 import { IQuestionRepository } from 'src/questions/domain/repositories/question.repository';
 
-import { QuestionMapper } from '../mappers/question.mapper';
-import { Questions, QuestionsDocument } from '../schemas/question.model';
+import { QuestionMapper } from '../mappers/questions.mapper';
+import { Questions, QuestionsDocument } from '../models/questions.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 

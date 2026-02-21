@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { QuestionEntity } from 'src/questions/domain/entities/question.entity';
-
-import { QuestionMapper } from '../mappers/question.mapper';
-import { Questions, QuestionsDocument } from '../schemas/question.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ICategoriesRepository } from 'src/questions/domain/repositories/category.repository';
-import { Categories, CategoriesDocument } from '../schemas/category.model';
+import { ICategoriesRepository } from 'src/categories/domain/repositories/category.repository';
+import { Categories, CategoriesDocument } from '../models/category.model';
 import { CategoryMapper } from '../mappers/category.mapper';
-import { CategoryEntity } from 'src/questions/domain/entities/category.entity';
+import { CategoryEntity } from 'src/categories/domain/entities/category.entity';
 
 @Injectable()
 export class CategoriesRepository implements ICategoriesRepository {
@@ -32,7 +28,7 @@ export class CategoriesRepository implements ICategoriesRepository {
       if (!isExistedLesson) {
         await this.CategoriesModel.updateOne(
           { _id: existedChapter._id },
-          { $push: {lessons: categorySchema.lessons!![0]} },
+          { $push: { lessons: categorySchema.lessons!![0] } },
         );
       }
     }

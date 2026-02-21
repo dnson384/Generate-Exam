@@ -1,41 +1,37 @@
 import path from 'path';
 import * as fs from 'fs-extra';
 import { v4 } from 'uuid';
-import { QuestionEntity } from 'src/questions/domain/entities/question.entity';
+import { NewQuestionImporterDTO } from 'src/importer/application/dtos/parse-docx.dto';
 
-export default function ExtractOptions(
+export default function ExtractPara(
   content: any[],
-  resBase: QuestionEntity,
   currentQuestion: number,
-  curOptionIndex: number,
+  resBase: NewQuestionImporterDTO,
   chapter: string,
   lesson: string,
   uploadDir: string,
 ) {
-  let template = '';
-  const variables = {
-    math: {},
-    image: {},
-  };
-
-  // Xử lý option chỉ ảnh
+  // Xử lý câu hỏi
+  // Xử lý ảnh
   if (content[0].t === 'Image') {
-    const curVarIndex = Object.keys(
-      resBase.options[curOptionIndex].variables.image,
-    ).length;
-    template += `<image_${curVarIndex}>`;
+    const curVarIndex = Object.keys(resBase.question.variables.image).length;
+    resBase.question.template += ` \n<img_${curVarIndex}>\n `;
+
     const rawSrc = content[0].c[2][0];
     const sourcePath = path.resolve(rawSrc);
+
     const extension = path.extname(rawSrc);
     const newFileName = `${v4()}${extension}`;
+
     const destPath = path.join(
       uploadDir,
       chapter,
       lesson,
-      'options',
+      'question',
       currentQuestion.toString(),
       newFileName,
     );
+
     try {
       fs.moveSync(sourcePath, destPath, { overwrite: true });
 
@@ -49,30 +45,22 @@ export default function ExtractOptions(
       const normalizedPath = relativePart.split(path.sep).join('/');
       const publicUrl = `/${encodeURI('static/' + normalizedPath)}`;
 
-      variables.image[`<image_${curVarIndex}>`] = publicUrl;
+      resBase.question.variables.image[`img_${curVarIndex}`] = publicUrl;
     } catch (err) {
       console.error(`Lỗi di chuyển ảnh ${rawSrc}:`, err);
     }
-  } 
+  }
   // Xử lý option tích hợp ký tự, công thức
   else {
     content.forEach((raw) => {
-      if (raw.t === 'Str') template += raw.c;
-      else if (raw.t === 'Space') template += ' ';
+      if (raw.t === 'Str') resBase.question.template += raw.c;
+      else if (raw.t === 'Space') resBase.question.template += ' ';
+      else if (raw.t === 'LineBreak') resBase.question.template += ' \n';
       else if (raw.t === 'Math') {
-        let curVarIndex = 0;
-        if (resBase.options[curOptionIndex]) {
-          curVarIndex = Object.keys(
-            resBase.options[curOptionIndex].variables,
-          ).length;
-        }
-        template += `<math_${curVarIndex}>`;
-        variables.math[`math_${curVarIndex}`] = raw.c[1];
+        const curVarIndex = Object.keys(resBase.question.variables.math).length;
+        resBase.question.template += `<math_${curVarIndex}>`;
+        resBase.question.variables.math[`math_${curVarIndex}`] = raw.c[1];
       }
     });
   }
-
-  resBase.options[curOptionIndex].template = template;
-  resBase.options[curOptionIndex].variables = variables;
-  // resBase.options.push({ template: template, variables: variables });
 }
