@@ -1,4 +1,4 @@
-import { Categories, CategoriesDocument } from '../models/category.model';
+import { Categories, CategoriesDocument } from '../schemas/category.schemas';
 import { CategoryEntity } from 'src/categories/domain/entities/category.entity';
 
 export class CategoryMapper {

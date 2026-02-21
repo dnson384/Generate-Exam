@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { IFileParser } from './ports/file-parser.port';
-import { CategoriesUseCase } from 'src/categories/application/category.usecase';
-import { QuestionsUseCase } from 'src/questions/application/questions.usecase';
 import { NewQuestionDTO } from 'src/questions/application/dtos/questions.dto';
 import { NewCategoryDTO } from 'src/categories/application/dto/category.dto';
+import { QuestionsServices } from 'src/questions/application/services/questions.services';
+import { CategoriesServices } from 'src/categories/application/services/category.services';
 
 @Injectable()
 export class ImporterUseCase {
   constructor(
-    private readonly questionsUsecase: QuestionsUseCase,
-    private readonly categoriesUsecase: CategoriesUseCase,
+    private readonly questionsServices: QuestionsServices,
+    private readonly categoriesServices: CategoriesServices,
     private readonly fileParser: IFileParser,
   ) {}
 
@@ -34,8 +34,8 @@ export class ImporterUseCase {
     };
     
     return (
-      (await this.questionsUsecase.insert(newQuestionsDTO)) &&
-      (await this.categoriesUsecase.insert(newCategoryDTO))
+      (await this.questionsServices.insert(newQuestionsDTO)) &&
+      (await this.categoriesServices.insert(newCategoryDTO))
     );
   }
 }

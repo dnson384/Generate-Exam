@@ -8,6 +8,7 @@ import {
 } from './infrastructure/database/models/questions.model';
 import { IQuestionRepository } from './domain/repositories/question.repository';
 import { QuestionRepository } from './infrastructure/database/repositories/questions.repository';
+import { QuestionsServices } from './application/services/questions.services';
 
 @Module({
   imports: [
@@ -17,8 +18,10 @@ import { QuestionRepository } from './infrastructure/database/repositories/quest
   ],
   controllers: [QuestionsController],
   providers: [
+    QuestionsServices,
     QuestionsUseCase,
     { provide: IQuestionRepository, useClass: QuestionRepository },
   ],
+  exports: [QuestionsServices]
 })
-export class DocumentModule {}
+export class QuestionsModule {}

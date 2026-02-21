@@ -8,7 +8,7 @@ import { TransactionalAdapterMongoose } from '@nestjs-cls/transactional-adapter-
 
 import { join } from 'path';
 
-import { DocumentModule } from './importer/documents.module';
+import { ImporterModule } from './importer/importer.module';
 
 @Module({
   imports: [
@@ -40,7 +40,7 @@ import { DocumentModule } from './importer/documents.module';
       rootPath: join(process.cwd(), 'static', 'uploads'),
       serveRoot: '/static',
     }),
-    DocumentModule,
+    ImporterModule,
   ],
 })
 export class AppModule {}
