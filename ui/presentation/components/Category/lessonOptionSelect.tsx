@@ -31,7 +31,7 @@ export default function LessonOptionSelect({
           return (
             <label
               key={content}
-              className="flex items-start gap-2 max-w-sm wrap-normal"
+              className="flex items-start gap-2 w-lg wrap-normal text-justify"
             >
               <input
                 type="checkbox"

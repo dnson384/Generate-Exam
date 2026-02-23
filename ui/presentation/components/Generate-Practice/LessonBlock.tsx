@@ -1,15 +1,16 @@
 import { LessonData } from "@/domain/entities/category.entity";
-import { ChangeEvent, useState } from "react";
+import { Dispatch, SetStateAction, ChangeEvent, useState } from "react";
 import LessonSelect from "../Category/lessonSelect";
 import { GeneratePracticeEntity } from "@/domain/entities/generate-practice.entity";
 import LessonOptionSelect from "../Category/lessonOptionSelect";
 
 interface LessonBlockData {
   lesson: GeneratePracticeEntity;
-  selectedLessonsCount: number;
+  selectedLessons: GeneratePracticeEntity[];
   index: number;
   lessonsData: LessonData[];
   handleLessonSelect(lesson: LessonData, index: number): void;
+  setSelectedLessons: Dispatch<SetStateAction<GeneratePracticeEntity[]>>;
   handleLessonOptionSelect(
     event: ChangeEvent<HTMLInputElement>,
     field: string,
@@ -19,9 +20,10 @@ interface LessonBlockData {
 }
 export default function LessonBlock({
   lesson,
-  selectedLessonsCount,
+  selectedLessons,
   index,
   lessonsData,
+  setSelectedLessons,
   handleLessonSelect,
   handleLessonOptionSelect,
   handleAddLesson,
@@ -29,9 +31,17 @@ export default function LessonBlock({
   const [search, setSearch] = useState<string>(lesson.name || "");
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const filteredLessons = lessonsData.filter((l: LessonData) =>
-    l.name.toLowerCase().includes(search.toLowerCase()),
-  );
+  const selectedLessonNames = selectedLessons.map((sl) => sl.name);
+
+  const filteredLessons = lessonsData.filter((l: LessonData) => {
+    const matchesSearch = l.name.toLowerCase().includes(search.toLowerCase());
+
+    const isSelected =
+      selectedLessonNames.includes(l.name) && l.name !== lesson.name;
+
+    return matchesSearch && !isSelected;
+  });
+
   const currentLesson = lessonsData.find((l: any) => l.name === lesson.name);
 
   return (
@@ -43,6 +53,9 @@ export default function LessonBlock({
         onSearchChange={(value: string) => {
           setSearch(value);
           setIsOpen(true);
+          if (value.trim() === "") {
+            setSelectedLessons((prev) => prev.filter((_, i) => i !== index));
+          }
         }}
         onSelect={(selectedOption) => {
           handleLessonSelect(selectedOption, index);
@@ -66,7 +79,7 @@ export default function LessonBlock({
                   inputMode="numeric"
                   pattern="[0-9]*"
                   placeholder="Nhập số lượng câu hỏi"
-                  className="min-w-xs px-3 py-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="min-w-lg px-3 py-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                   value={lesson.questionsCount}
                   onChange={(e) =>
                     handleLessonOptionSelect(e, "Số lượng câu hỏi", index)
@@ -101,7 +114,8 @@ export default function LessonBlock({
             />
           </div>
 
-          {index === selectedLessonsCount - 1 ? (
+          {index === selectedLessons.length - 1 &&
+          selectedLessons.length < lessonsData.length ? (
             <div className="mt-5 w-full flex justify-center">
               <div
                 className="bg-blue-100 w-70 py-2 font-medium rounded-lg cursor-pointer hover:bg-blue-700 hover:text-white"
@@ -110,7 +124,9 @@ export default function LessonBlock({
                 <p className="text-center">Chọn thêm bài</p>
               </div>
             </div>
-          ) : <div className="border border-0.5 border-gray-300 mt-5"></div>}
+          ) : (
+            <div className="border border-0.5 border-gray-300 mt-5"></div>
+          )}
         </>
       )}
     </div>

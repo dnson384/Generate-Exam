@@ -1,13 +1,16 @@
-import { GetAllCategoriesUsecase } from "@/application/usecases/category/get-all";
-import { CategoryRepositoryImpl } from "@/infrastructure/repositories/categoryRepositoryImpl";
 import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
+import { PracticeRepositoryImpl } from "@/infrastructure/repositories/practiceRepositoryImpl";
+import { GetPracticeByIdUsecase } from "@/application/usecases/practice/get-practice-by-id";
+
 export async function GET(req: NextRequest) {
   try {
-    const repo = new CategoryRepositoryImpl();
-    const usecase = new GetAllCategoriesUsecase(repo);
-    const response = await usecase.execute();
+    const id = req.nextUrl.searchParams.get("id");
+
+    const repo = new PracticeRepositoryImpl();
+    const usecase = new GetPracticeByIdUsecase(repo);
+    const response = await usecase.execute(id!);
     return NextResponse.json(response, { status: 200 });
   } catch (err) {
     if (isAxiosError(err)) {

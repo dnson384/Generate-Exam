@@ -1,4 +1,4 @@
-import { uploadDocxFileUsecase } from "@/application/usecases/uploadFile/uploadDocxFileUsecase";
+import { uploadDocxFileUsecase } from "@/application/usecases/uploadFile/upload-docx-file";
 import { UploadDocxFileRepositoryImpl } from "@/infrastructure/repositories/uploadFileRepositoryImpl";
 import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";

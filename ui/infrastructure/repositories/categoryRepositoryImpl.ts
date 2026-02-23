@@ -2,8 +2,6 @@ import axios from "axios";
 import { ICategoryRepository } from "@/domain/repositories/ICategoryRepository";
 import { CategoryEntity } from "@/domain/entities/category.entity";
 
-
-
 export class CategoryRepositoryImpl implements ICategoryRepository {
   private readonly baseUrl: string;
 
