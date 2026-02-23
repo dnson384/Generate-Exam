@@ -5,13 +5,9 @@ import { NewQuestionImporterDTO } from 'src/importer/application/dtos/parse-docx
 
 export default function ExtractPara(
   content: any[],
-  currentQuestion: number,
   resBase: NewQuestionImporterDTO,
-  chapter: string,
-  lesson: string,
   uploadDir: string,
 ) {
-  // Xử lý câu hỏi
   // Xử lý ảnh
   if (content[0].t === 'Image') {
     const curVarIndex = Object.keys(resBase.question.variables.image).length;
@@ -25,10 +21,6 @@ export default function ExtractPara(
 
     const destPath = path.join(
       uploadDir,
-      chapter,
-      lesson,
-      'question',
-      currentQuestion.toString(),
       newFileName,
     );
 

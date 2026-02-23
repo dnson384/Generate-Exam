@@ -70,3 +70,8 @@ export class Questions {
   options: Options[];
 }
 export const QuestionsSchema = SchemaFactory.createForClass(Questions);
+
+QuestionsSchema.index({ chapter: 1, lesson: 1 });
+QuestionsSchema.index({ exerciseType: 1 });
+QuestionsSchema.index({ difficultyLevel: 1 });
+QuestionsSchema.index({ questionType: 1 });

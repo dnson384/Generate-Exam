@@ -16,9 +16,11 @@ export class CategoriesRepository implements ICategoriesRepository {
   async saveCategory(category: CategoryEntity): Promise<boolean> {
     const categorySchema: Partial<Categories> =
       CategoryMapper.toSchema(category);
+
     const existedChapter = await this.categoriesModel.findOne({
       chapter: category.chapter,
     });
+    
     if (!existedChapter) {
       await this.categoriesModel.insertOne(categorySchema);
     } else {

@@ -36,3 +36,16 @@ export class QuestionEntity {
     }
   }
 }
+
+export class LessonPayloadEntity {
+  name: string;
+  questionsCount: number;
+  exerciseTypes: string[];
+  difficultyLevels: string[];
+  learningOutcomes: string[];
+  questionTypes: string[];
+
+  constructor(props: LessonPayloadEntity) {
+    Object.assign(this, props);
+  }
+}

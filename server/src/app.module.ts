@@ -37,7 +37,7 @@ import { ImporterModule } from './importer/importer.module';
       inject: [ConfigService],
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'static', 'uploads'),
+      rootPath: join(process.cwd(), 'static'),
       serveRoot: '/static',
     }),
     ImporterModule,

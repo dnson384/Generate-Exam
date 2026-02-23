@@ -6,10 +6,7 @@ import { NewQuestionImporterDTO } from 'src/importer/application/dtos/parse-docx
 export default function ExtractOptions(
   content: any[],
   resBase: NewQuestionImporterDTO,
-  currentQuestion: number,
   curOptionIndex: number,
-  chapter: string,
-  lesson: string,
   uploadDir: string,
 ) {
   let template = '';
@@ -30,10 +27,6 @@ export default function ExtractOptions(
     const newFileName = `${v4()}${extension}`;
     const destPath = path.join(
       uploadDir,
-      chapter,
-      lesson,
-      'options',
-      currentQuestion.toString(),
       newFileName,
     );
     try {

@@ -9,9 +9,11 @@ import {
 import { IQuestionRepository } from './domain/repositories/question.repository';
 import { QuestionRepository } from './infrastructure/database/repositories/questions.repository';
 import { QuestionsServices } from './application/services/questions.services';
+import { PracticesModule } from 'src/practices/practices.module';
 
 @Module({
   imports: [
+    PracticesModule,
     MongooseModule.forFeature([
       { name: Questions.name, schema: QuestionsSchema },
     ]),
@@ -22,6 +24,6 @@ import { QuestionsServices } from './application/services/questions.services';
     QuestionsUseCase,
     { provide: IQuestionRepository, useClass: QuestionRepository },
   ],
-  exports: [QuestionsServices]
+  exports: [QuestionsServices],
 })
 export class QuestionsModule {}

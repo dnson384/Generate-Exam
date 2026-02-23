@@ -24,3 +24,12 @@ export interface NewQuestionDTO {
   question: QuestionContentDTO;
   options: OptionsDataDTO[];
 }
+
+export interface LessonPayloadDTO {
+  name: string;
+  questionsCount: number;
+  exerciseTypes: string[];
+  difficultyLevels: string[];
+  learningOutcomes: string[];
+  questionTypes: string[];
+}

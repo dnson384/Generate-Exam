@@ -7,7 +7,7 @@ import {
 import { ImporterUseCase } from '../application/importer.usecase';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('document')
+@Controller('importer')
 export class ImporterController {
   constructor(private readonly importUseCase: ImporterUseCase) {}
 

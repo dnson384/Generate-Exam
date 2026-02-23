@@ -36,7 +36,7 @@ export class PandocParserService implements IFileParser {
 
   async parse(buffer: Buffer): Promise<ParsedDataOutput> {
     const tempFileName = `temp_${v4()}.docx`;
-    const tempFilePath = path.join(this.uploadDir, tempFileName);
+    const tempFilePath = path.join(this.uploadDir, 'docx', tempFileName);
 
     try {
       await fs.writeFile(tempFilePath, buffer);
@@ -155,10 +155,7 @@ export class PandocParserService implements IFileParser {
         else if (title === 'Para') {
           ExtractPara(
             content,
-            questionsRes.length,
             questionsRes[questionsRes.length - 1],
-            chapter,
-            lesson,
             this.uploadDir,
           );
         }
@@ -169,10 +166,7 @@ export class PandocParserService implements IFileParser {
             ExtractOptions(
               raw[0].c,
               questionsRes[questionsRes.length - 1],
-              questionsRes.length,
               questionsRes[questionsRes.length - 1].options.length - 1,
-              chapter,
-              lesson,
               this.uploadDir,
             );
           });
