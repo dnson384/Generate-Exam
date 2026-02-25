@@ -3,5 +3,6 @@ import { PracticeEntity } from '../entities/practice.entity';
 
 export abstract class IPracticeRepository {
   abstract savePractice(practice: PracticeEntity): Promise<string>;
-  abstract getPracticeById(id: string): Promise<PracticeDetailDTO>;
+  abstract getAllPractices(): Promise<PracticeEntity[]>;
+  abstract getPracticeDetailById(id: string): Promise<PracticeDetailDTO>;
 }

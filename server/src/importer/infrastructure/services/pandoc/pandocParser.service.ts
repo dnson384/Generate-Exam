@@ -36,7 +36,7 @@ export class PandocParserService implements IFileParser {
 
   async parse(buffer: Buffer): Promise<ParsedDataOutput> {
     const tempFileName = `temp_${v4()}.docx`;
-    const tempFilePath = path.join(this.uploadDir, 'docx', tempFileName);
+    const tempFilePath = path.join(this.uploadDir, tempFileName);
 
     try {
       await fs.writeFile(tempFilePath, buffer);

@@ -5,8 +5,13 @@ import { PracticesUseCase } from '../application/practices.usecase';
 export class PracticesController {
   constructor(private readonly practiceUsecase: PracticesUseCase) {}
 
+  @Get('/all')
+  async getAllPractice() {
+    return await this.practiceUsecase.getAllPractices();
+  }
+
   @Get(':id')
-  async parseDocx(@Param('id') id: string) {
-    return await this.practiceUsecase.getPracticeById(id);
+  async getPracticeDetailById(@Param('id') id: string) {
+    return await this.practiceUsecase.getPracticeDetailById(id);
   }
 }

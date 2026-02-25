@@ -22,7 +22,19 @@ export class PracticeRepository implements IPracticeRepository {
     return result.id.toString();
   }
 
-  async getPracticeById(id: string): Promise<PracticeDetailDTO> {
+  async getAllPractices(): Promise<PracticeEntity[]> {
+    const practices = await this.PracticeModel.find();
+
+    if (practices.length === 0) throw Error('Chưa tồn tại đề ôn tập nào');
+
+    const practicesDomain: PracticeEntity[] = practices.map((practice) =>
+      PracticeMapper.toDomain(practice),
+    );
+
+    return practicesDomain;
+  }
+
+  async getPracticeDetailById(id: string): Promise<PracticeDetailDTO> {
     const practice =
       await this.PracticeModel.findById(id).populate('questionsId');
 
