@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import {
-  Document,
-  Packer,
-  Paragraph,
-  TextRun,
-  HeadingLevel,
-  AlignmentType,
-  ImageRun,
-} from 'docx';
+import { Document, Packer, Paragraph, HeadingLevel, AlignmentType } from 'docx';
 import * as JSZip from 'jszip';
-import sizeOf from 'image-size';
 import { WordPayloadDTO } from './dtos/exporter.dto';
-import { getImageBuffer } from '../infrastructure/utils/getImageBuffer';
-import { latexToOmml } from '../infrastructure/utils/mathConverter';
+import { getQuestionImageBuffer } from '../infrastructure/utils/Get/getQuestionImageBuffer';
+import { BuildQuestion } from '../infrastructure/utils/Build/buildQuestion';
+import { BuildOption } from '../infrastructure/utils/Build/buildOption';
+import { getOptionImageBuffer } from '../infrastructure/utils/Get/getOptionImageBuffer';
+
+interface MathContext {
+  map: Record<string, string>;
+  counter: number;
+}
+interface MathOptionContext {
+  [questionId: string]: MathContext;
+}
 
 @Injectable()
 export class ExporterUsecase {
@@ -21,12 +22,15 @@ export class ExporterUsecase {
 
     const regex = /(<(?:math|img)_\d+>)/g;
 
-    const mathMap: Record<string, string> = {};
-    let mathCounter = 0;
+    const mathContext: MathContext = {
+      map: {},
+      counter: 0,
+    };
 
-    const imageCache: Record<string, Buffer> = await getImageBuffer(
-      data.questionsSorted,
-    );
+    const mathOptionContext: MathOptionContext = {};
+
+    const imageQuestionCache: Record<string, Buffer> =
+      await getQuestionImageBuffer(data.questionsSorted);
 
     // Tiêu đề
     children.push(
@@ -37,94 +41,125 @@ export class ExporterUsecase {
       }),
     );
 
-    Object.entries(data.questionsSorted).forEach(
-      ([lessonName, questions], index) => {
-        // Phần
-        children.push(
-          new Paragraph({
-            text: `Phần ${index + 1}. ${lessonName}`,
-            heading: HeadingLevel.HEADING_2,
-          }),
+    for (const [index, [lessonName, questions]] of Object.entries(
+      data.questionsSorted,
+    ).entries()) {
+      // Phần
+      children.push(
+        new Paragraph({
+          text: `Phần ${index + 1}. ${lessonName}`,
+          heading: HeadingLevel.HEADING_2,
+        }),
+      );
+
+      // Câu hỏi
+      for (const [index, q] of questions.entries()) {
+        const currentQuestion = BuildQuestion(
+          index,
+          q.question,
+          regex,
+          imageQuestionCache,
+          mathContext,
         );
 
-        // Câu hỏi
-        questions.forEach((q, index) => {
-          const template = q.question.template;
-          const mathVars = q.question.variables.math;
-          const imageVars = q.question.variables.image;
+        const imageOptionCache = await getOptionImageBuffer(q.options);
 
-          // Đề bài
-          let questionsNode: any[] = [];
-          questionsNode.push(
-            new TextRun({
-              text: `Câu ${index + 1}. `,
-              bold: true,
-            }),
+        q.options.forEach((opt, index) => {
+          const currentOption = BuildOption(
+            q.id,
+            index,
+            q.questionType,
+            opt,
+            regex,
+            imageOptionCache,
+            mathOptionContext,
           );
 
-          const parts = template.split(regex);
-
-          parts.forEach((part) => {
-            // Công thức toán học
-            if (part.startsWith('<math_') && part.endsWith('>')) {
-              const mathKey = part.replace(/[<>]/g, '');
-              const latex = mathVars[mathKey];
-              const omml = latexToOmml(latex);
-              const placeholderId = `MMMMATH_${mathCounter++}MMMM`;
-              mathMap[placeholderId] = omml;
-              questionsNode.push(new TextRun(placeholderId));
-            }
-            // Ảnh
-            else if (part.startsWith('<img_') && part.endsWith('>')) {
-              if (questionsNode.length > 0) {
-                children.push(new Paragraph({ children: questionsNode }));
-                questionsNode = [];
-              }
-
-              const imageKey = part.replace(/[<>]/g, '');
-              const imageURL = imageVars[imageKey];
-              const buffer = imageCache[imageURL];
-
-              if (buffer) {
-                const dimensions = sizeOf(buffer);
-                const width = Math.round(Math.min(dimensions.width, 151));
-                const height = Math.round(
-                  (width * dimensions.height) / dimensions.width,
-                );
-                const imageType = dimensions.type === 'jpg' ? 'jpeg' : (dimensions.type || 'png');
-
-                children.push(
-                  new Paragraph({
-                    children: [
-                      new ImageRun({
-                        data: buffer,
-                        transformation: {
-                          width: width,
-                          height: height,
-                        },
-                        type: imageType as any,
-                      }),
-                    ],
-                    alignment: AlignmentType.CENTER,
-                  }),
-                );
-              }
-            }
-            // Text
-            else {
-              questionsNode.push(new TextRun({ text: part }));
-            }
-          });
-
-          if (questionsNode.length > 0) {
-            children.push(new Paragraph({ children: questionsNode }));
-          }
+          currentQuestion.push(...currentOption);
         });
-      },
-    );
+
+        children.push(...currentQuestion);
+      }
+    }
 
     const doc = new Document({
-      sections: [{ properties: {}, children }],
+      styles: {
+        default: {
+          document: {
+            run: {
+              size: 26,
+              font: 'Times New Roman',
+              color: '000000',
+            },
+            paragraph: {
+              alignment: AlignmentType.JUSTIFIED,
+              spacing: {
+                before: 120,
+                after: 120,
+                line: 312,
+                lineRule: 'auto',
+              },
+              indent: { left: 0, right: 0 },
+            },
+          },
+          heading1: {
+            run: {
+              size: 34,
+              font: 'Times New Roman',
+              color: '000000',
+              allCaps: true,
+              bold: true
+            },
+            paragraph: {
+              alignment: AlignmentType.JUSTIFIED,
+              spacing: {
+                before: 0,
+                after: 360,
+                line: 312,
+                lineRule: 'auto',
+              },
+              indent: { left: 0, right: 0 },
+            },
+          },
+          heading2: {
+            run: {
+              size: 30,
+              font: 'Times New Roman',
+              color: '000000',
+              bold: true
+            },
+            paragraph: {
+              alignment: AlignmentType.JUSTIFIED,
+              spacing: {
+                before: 120,
+                after: 120,
+                line: 312,
+                lineRule: 'auto',
+              },
+              indent: { left: 0, right: 0 },
+            },
+          },
+        },
+      },
+      sections: [
+        {
+          properties: {
+            page: {
+              size: {
+                width: 11907,
+                height: 16840,
+              },
+              margin: {
+                top: 1134,
+                bottom: 1134,
+                left: 1701,
+                right: 851,
+              },
+            },
+          },
+          children: children,
+        },
+      ],
     });
 
     const rawBuffer = await Packer.toBuffer(doc);
@@ -132,13 +167,23 @@ export class ExporterUsecase {
     let documentXml = await zip.file('word/document.xml')?.async('string');
 
     if (documentXml) {
-      Object.entries(mathMap).forEach(([placeholderId, omml]) => {
+      Object.entries(mathContext.map).forEach(([placeholderId, omml]) => {
         const runRegex = new RegExp(
           `<w:r\\b[^>]*>(?:(?!<\\/w:r>)[\\s\\S])*?${placeholderId}(?:(?!<\\/w:r>)[\\s\\S])*?<\\/w:r>`,
           'g',
         );
 
         documentXml = documentXml!.replace(runRegex, omml);
+      });
+
+      Object.entries(mathOptionContext).forEach(([questionId, context]) => {
+        Object.entries(context.map).forEach(([placeholderId, omml]) => {
+          const runRegex = new RegExp(
+            `<w:r\\b[^>]*>(?:(?!<\\/w:r>)[\\s\\S])*?${placeholderId}(?:(?!<\\/w:r>)[\\s\\S])*?<\\/w:r>`,
+            'g',
+          );
+          documentXml = documentXml!.replace(runRegex, omml);
+        });
       });
 
       zip.file('word/document.xml', documentXml);

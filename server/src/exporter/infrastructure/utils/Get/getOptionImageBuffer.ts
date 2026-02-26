@@ -1,22 +1,19 @@
 import axios from 'axios';
-import { QuestionDataDTO } from 'src/exporter/application/dtos/exporter.dto';
+import { ContentDTO } from 'src/exporter/application/dtos/exporter.dto';
 
-export async function getImageBuffer(
-  questionsSorted: Record<string, QuestionDataDTO[]>,
+export async function getOptionImageBuffer(
+  options: ContentDTO[],
 ): Promise<Record<string, Buffer>> {
   const BACKEND_URL = process.env.BACKEND_URL;
 
   const uniqueUrls = new Set<string>();
 
-  Object.values(questionsSorted).forEach((questions) => {
-    questions.forEach((q) => {
-      const imgVars = q.question.variables.image;
+  options.forEach((opt) => {
+    const imgVars = opt.variables.image;
+    if (!imgVars) return;
 
-      if (!imgVars) return;
-
-      Object.values(imgVars).forEach((url) => {
-        if (url) uniqueUrls.add(url);
-      });
+    Object.values(imgVars).forEach((url) => {
+      if (url) uniqueUrls.add(url);
     });
   });
 
@@ -27,7 +24,6 @@ export async function getImageBuffer(
   if (BACKEND_URL) {
     await Promise.all(
       urlArray.map(async (url) => {
-        console.log(url);
         try {
           const response = await axios.get(`${BACKEND_URL}${url}`, {
             responseType: 'arraybuffer',

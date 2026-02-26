@@ -1,12 +1,4 @@
-export class QuestionContentDTO {
-  template: string;
-  variables: {
-    math: Record<string, string>;
-    image: Record<string, string>;
-  };
-}
-
-export class OptionsDataDTO {
+export class ContentDTO {
   template: string;
   variables: {
     math: Record<string, string>;
@@ -17,8 +9,8 @@ export class OptionsDataDTO {
 export class QuestionDataDTO {
   id: string;
   questionType: string;
-  question: QuestionContentDTO;
-  options: OptionsDataDTO[];
+  question: ContentDTO;
+  options: ContentDTO[];
 }
 
 export class WordPayloadDTO {

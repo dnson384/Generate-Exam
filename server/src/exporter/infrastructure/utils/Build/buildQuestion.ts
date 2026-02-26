@@ -1,21 +1,22 @@
 import sizeOf from 'image-size';
 import { AlignmentType, ImageRun, Paragraph, TextRun } from 'docx';
-import { QuestionContentDTO } from 'src/exporter/application/dtos/exporter.dto';
-import { latexToOmml } from './mathConverter';
+import { ContentDTO } from 'src/exporter/application/dtos/exporter.dto';
+import { latexToOmml } from '../Converter/mathConverter';
 
 interface MathContext {
   map: Record<string, string>;
   counter: number;
 }
 
-export function BuildQuestionPara(
-  children: any[],
+export function BuildQuestion(
   index: number,
-  question: QuestionContentDTO,
+  question: ContentDTO,
   regex: RegExp,
   imageCache: Record<string, Buffer>,
   mathContext: MathContext,
-) {
+): any[] {
+  const currentQuestion: any[] = [];
+
   const template = question.template;
   const mathVars = question.variables.math;
   const imageVars = question.variables.image;
@@ -43,7 +44,7 @@ export function BuildQuestionPara(
     // Ảnh
     else if (part.startsWith('<img_') && part.endsWith('>')) {
       if (questionsNode.length > 0) {
-        children.push(new Paragraph({ children: questionsNode }));
+        currentQuestion.push(new Paragraph({ children: questionsNode }));
         questionsNode = [];
       }
 
@@ -60,7 +61,7 @@ export function BuildQuestionPara(
         const imageType =
           dimensions.type === 'jpg' ? 'jpeg' : dimensions.type || 'png';
 
-        children.push(
+        currentQuestion.push(
           new Paragraph({
             children: [
               new ImageRun({
@@ -84,8 +85,8 @@ export function BuildQuestionPara(
   });
 
   if (questionsNode.length > 0) {
-    children.push(new Paragraph({ children: questionsNode }));
+    currentQuestion.push(new Paragraph({ children: questionsNode }));
   }
 
-  return children;
+  return currentQuestion;
 }
