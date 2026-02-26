@@ -1,9 +1,12 @@
 import axios from "axios";
-import { GeneratePracticePayload } from "../schemas/generate-practice.schema";
+import { GeneratePracticePayload } from "../schemas/generatePractice.schema";
 
 export async function generatePracticeService(
   payload: GeneratePracticePayload,
-): Promise<any> {
-  const response = await axios.post("/api/question/generate-practice", payload);
+): Promise<string> {
+  const response = await axios.post<string>(
+    "/api/question/generatePractice",
+    payload,
+  );
   return response.data;
 }

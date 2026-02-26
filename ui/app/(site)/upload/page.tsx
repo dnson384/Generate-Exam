@@ -1,4 +1,5 @@
 "use client";
+import NavBar from "@/presentation/components/layout/navbar";
 import useDocxUpload from "@/presentation/hooks/UploadFile/useUploadFile";
 
 export default function Upload() {
@@ -37,6 +38,7 @@ export default function Upload() {
 
   return (
     <main className="h-screen flex justify-center items-center">
+      <NavBar />
       <div className="">
         <div className="flex items-center gap-3 mb-3">
           <p className="text-lg text-blue-600 font-bold">Tên môn học</p>

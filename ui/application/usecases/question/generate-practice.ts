@@ -1,4 +1,4 @@
-import { GeneratePracticePayload } from "@/domain/entities/generate-practice.entity";
+import { GeneratePracticePayload } from "@/domain/entities/generatePractice.entity";
 import { IQuestionRepository } from "@/domain/repositories/IQuestionRepository";
 
 export class GeneratePracticeUsecase {

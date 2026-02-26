@@ -1,5 +1,6 @@
 import Image from "next/image";
 import katex from "katex";
+import "katex/dist/katex.min.css";
 
 interface Data {
   order: number;
@@ -15,7 +16,7 @@ export default function QuestionContent({ order, template, variables }: Data) {
 
   return (
     <div className="leading-relaxed text-justify font-medium mb-1">
-      <span className="font-bold">Câu {order}. </span> 
+      <span className="font-bold">Câu {order}. </span>
       {parts.map((part, index) => {
         if (part.startsWith("<") && part.endsWith(">")) {
           const key = part.slice(1, -1);

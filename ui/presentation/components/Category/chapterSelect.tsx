@@ -43,7 +43,7 @@ export default function ChapterSelect({
       <div className="relative" ref={dropdownRef}>
         <input
           type="text"
-          className="min-w-lg px-3 py-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-xl px-3 py-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
           placeholder="Tên chương"
           value={searchChapter}
           onChange={(e) => onSearchChange(e.target.value)}

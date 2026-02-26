@@ -1,6 +1,10 @@
 import axios from "axios";
 import { IPracticeRepository } from "@/domain/repositories/IPracticeRepository";
-import { PracticeDetailEntity } from "@/domain/entities/practice.entity";
+import {
+  ExportPayload,
+  PracticeDetailEntity,
+  PracticeEntity,
+} from "@/domain/entities/practice.entity";
 
 export class PracticeRepositoryImpl implements IPracticeRepository {
   private readonly baseUrl: string;
@@ -12,9 +16,27 @@ export class PracticeRepositoryImpl implements IPracticeRepository {
         : process.env.NEXT_PUBLIC_BACKEND_PROD_URL!;
   }
 
+  async getAllPractices(): Promise<PracticeEntity[]> {
+    const { data } = await axios.get<PracticeEntity[]>(
+      `${this.baseUrl}/practice/all`,
+    );
+    return data;
+  }
+
   async getPracticeById(id: string): Promise<PracticeDetailEntity> {
-    const { data } = await axios.get<Promise<PracticeDetailEntity>>(
+    const { data } = await axios.get<PracticeDetailEntity>(
       `${this.baseUrl}/practice/${id}`,
+    );
+    return data;
+  }
+
+  async exportWordFile(payload: ExportPayload): Promise<any> {
+    const { data } = await axios.post<any>(
+      `${this.baseUrl}/export/word`,
+      payload,
+      {
+        responseType: "arraybuffer",
+      },
     );
     return data;
   }

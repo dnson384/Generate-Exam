@@ -2,7 +2,7 @@ import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 import { PracticeRepositoryImpl } from "@/infrastructure/repositories/practiceRepositoryImpl";
-import { GetPracticeByIdUsecase } from "@/application/usecases/practice/get-practice-by-id";
+import { GetPracticeByIdUsecase } from "@/application/usecases/practice/getPracticeById";
 
 export async function GET(req: NextRequest) {
   try {

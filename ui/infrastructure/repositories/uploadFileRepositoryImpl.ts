@@ -12,7 +12,7 @@ export class UploadDocxFileRepositoryImpl implements IUploadDocxFileRepository {
   }
 
   async uploadDocxFile(formData: FormData): Promise<boolean> {
-    const { data } = await axios.post<Promise<boolean>>(
+    const { data } = await axios.post<boolean>(
       `${this.baseUrl}/importer/parse`,
       formData,
     );

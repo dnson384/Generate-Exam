@@ -13,7 +13,7 @@ export class CategoryRepositoryImpl implements ICategoryRepository {
   }
 
   async getAll(): Promise<CategoryEntity[]> {
-    const { data } = await axios.get<Promise<CategoryEntity[]>>(
+    const { data } = await axios.get<CategoryEntity[]>(
       `${this.baseUrl}/category/all`,
     );
     return data;

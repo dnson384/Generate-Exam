@@ -10,7 +10,7 @@ interface Data {
   };
 }
 
-export default function MultipleChoiceContent({ template, variables }: Data) {
+export default function TrueFalseContent({ template, variables }: Data) {
   const parts = template.split(/(<\w+>)/g);
 
   return (

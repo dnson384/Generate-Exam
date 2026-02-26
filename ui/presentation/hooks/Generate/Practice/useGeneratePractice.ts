@@ -1,9 +1,9 @@
 import { LessonData } from "@/domain/entities/category.entity";
-import { LessonPayload } from "@/domain/entities/generate-practice.entity";
+import { LessonPayload } from "@/domain/entities/generatePractice.entity";
 import {
   GeneratePracticePayload,
   LessonsPayload,
-} from "@/presentation/schemas/generate-practice.schema";
+} from "@/presentation/schemas/generatePractice.schema";
 import { generatePracticeService } from "@/presentation/services/question.service";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -109,11 +109,26 @@ export default function useGeneratePractice() {
 
   const handleGeneratePractice = async () => {
     const titleError = practiceTitle.trim().length === 0;
+    if (titleError) {
+      setError("Tiêu đề chưa được nhập");
+      return;
+    }
+
     const chapterError = selectedChapter.trim().length === 0;
+    if (chapterError) {
+      setError("Chương chưa được chọn");
+      return;
+    }
+    console.log(selectedLessons)
 
     const lessonsError = selectedLessons.some((lesson) => {
-      if (lesson.name.trim().length === 0) return true;
-      else if (lesson.difficultyLevels.length === 0) {
+      if (lesson.name.trim().length === 0) {
+        setError("Phải có ít nhất 1 bài");
+        return true;
+      } else if (!lesson.questionsCount) {
+        setError(`Bài ${lesson.name} phải có ít nhất 1 câu hỏir`);
+        return true;
+      } else if (lesson.difficultyLevels.length === 0) {
         setError(`Độ khó của bài ${lesson.name} chưa được chọn`);
         return true;
       } else if (lesson.exerciseTypes.length === 0) {

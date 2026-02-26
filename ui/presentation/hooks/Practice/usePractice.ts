@@ -1,29 +1,23 @@
+import { LessonExportPayload } from './../../schemas/exportPractice.schema';
 import { PracticeDetailEntity } from "@/domain/entities/practice.entity";
 import {
   OptionsData,
   QuestionContent,
 } from "@/domain/entities/question.entity";
-import { getPracticeByIdService } from "@/presentation/services/practice.service";
+import { QuestionExportPayload } from "@/presentation/schemas/exportPractice.schema";
+import {
+  exportWordFile,
+  getPracticeDetailByIdService,
+} from "@/presentation/services/practice.service";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-
-interface QuestionData {
-  id: string;
-  questionType: string;
-  question: QuestionContent;
-  options: OptionsData[];
-}
-
-interface LessonData {
-  [lesson: string]: QuestionData[];
-}
 
 export default function usePractice() {
   const pathname = usePathname();
 
   const [practice, setPractice] = useState<PracticeDetailEntity | null>(null);
 
-  const questionsSorted: LessonData = {};
+  const questionsSorted: LessonExportPayload = {};
   practice?.questions.forEach((question) => {
     if (!questionsSorted[question.lesson]) {
       questionsSorted[question.lesson] = [];
@@ -37,23 +31,29 @@ export default function usePractice() {
     });
   });
 
-  const parseQuestionTemplate = (template: string, variables: any) => {
-    let htmlContent = template;
+  const handleExportDocx = async () => {
+    if (!practice || Object.keys(questionsSorted).length === 0) return;
 
-    if (variables && variables.image) {
-      Object.entries(variables.image).forEach(([imgKey, imgUrl]) => {
-        const placeholder = `<${imgKey}>`;
-        const htmlImgTag = `<Image src={"/api/image${imgUrl}"} alt="${imgKey}" />
-        `;
-        htmlContent = htmlContent.split(placeholder).join(htmlImgTag);
-      });
+    try {
+      const blob = await exportWordFile(practice.title, questionsSorted);
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${practice.title}.docx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Lỗi khi tải file UI:", error);
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
       const id = pathname.split("/")[2];
-      const response = await getPracticeByIdService(id);
+      const response = await getPracticeDetailByIdService(id);
 
       if (response) {
         setPractice({
@@ -67,5 +67,5 @@ export default function usePractice() {
     fetchData();
   }, []);
 
-  return { practice, questionsSorted };
+  return { practice, questionsSorted, handleExportDocx };
 }

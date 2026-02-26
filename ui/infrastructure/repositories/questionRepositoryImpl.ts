@@ -1,6 +1,6 @@
 import axios from "axios";
 import { IQuestionRepository } from "@/domain/repositories/IQuestionRepository";
-import { GeneratePracticePayload } from "@/domain/entities/generate-practice.entity";
+import { GeneratePracticePayload } from "@/domain/entities/generatePractice.entity";
 
 export class QuestionRepositoryImpl implements IQuestionRepository {
   private readonly baseUrl: string;
@@ -13,9 +13,9 @@ export class QuestionRepositoryImpl implements IQuestionRepository {
   }
 
   async generatePractice(payload: GeneratePracticePayload): Promise<any> {
-    const { data } = await axios.post<Promise<any>>(
+    const { data } = await axios.post<string>(
       `${this.baseUrl}/question/generate-practice`,
-      payload
+      payload,
     );
     return data;
   }

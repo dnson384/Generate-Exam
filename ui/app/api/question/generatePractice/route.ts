@@ -1,8 +1,8 @@
 import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
-import { GeneratePracticePayload } from "@/domain/entities/generate-practice.entity";
-import { GeneratePracticePayloadSchema } from "@/presentation/schemas/generate-practice.schema";
+import { GeneratePracticePayload } from "@/domain/entities/generatePractice.entity";
+import { GeneratePracticePayloadSchema } from "@/presentation/schemas/generatePractice.schema";
 import { QuestionRepositoryImpl } from "@/infrastructure/repositories/questionRepositoryImpl";
 import { GeneratePracticeUsecase } from "@/application/usecases/question/generate-practice";
 
