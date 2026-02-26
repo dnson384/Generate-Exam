@@ -9,6 +9,7 @@ import { TransactionalAdapterMongoose } from '@nestjs-cls/transactional-adapter-
 import { join } from 'path';
 
 import { ImporterModule } from './importer/importer.module';
+import { ExporterModule } from './exporter/exporter.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ImporterModule } from './importer/importer.module';
       serveRoot: '/static',
     }),
     ImporterModule,
+    ExporterModule
   ],
 })
 export class AppModule {}

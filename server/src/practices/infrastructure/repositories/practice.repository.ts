@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -25,7 +25,7 @@ export class PracticeRepository implements IPracticeRepository {
   async getAllPractices(): Promise<PracticeEntity[]> {
     const practices = await this.PracticeModel.find();
 
-    if (practices.length === 0) throw Error('Chưa tồn tại đề ôn tập nào');
+    if (practices.length === 0) throw new NotFoundException('Chưa tồn tại đề ôn tập nào');
 
     const practicesDomain: PracticeEntity[] = practices.map((practice) =>
       PracticeMapper.toDomain(practice),

@@ -7,11 +7,6 @@ import { LessonPayloadDTO } from '../application/dtos/questions.dto';
 export class QuestionsController {
   constructor(private readonly questionsUseCase: QuestionsUseCase) {}
 
-  // @Post('parse')
-  // @UseInterceptors(FileInterceptor('file'))
-  // async parseDocx(@UploadedFile() file: Express.Multer.File) {
-  //   return await this.importUseCase.execute(file.buffer);
-  // }
   @Post('generate-practice')
   async generatePractice(@Body() payload: GeneratePracticePayload) {
     const { title, chapter, lessons } = payload;
