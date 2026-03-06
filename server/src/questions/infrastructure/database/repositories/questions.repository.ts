@@ -24,7 +24,7 @@ export class QuestionRepository implements IQuestionRepository {
     const questionsSchema: Partial<Questions>[] = questions.map((question) =>
       QuestionMapper.toSchema(question),
     );
-    await this.QuestionModel.insertMany(questionsSchema);
+    await this.QuestionModel.create(questionsSchema);
     return true;
   }
 

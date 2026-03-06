@@ -19,10 +19,21 @@ export class ImporterUseCase {
 
     const { questions, category } = await this.fileParser.parse(fileBuffer);
 
+    const newCategoryDTO: NewCategoryDTO = {
+      subject: subject,
+      chapter: category.chapter,
+      lessons: category.lessons,
+    };
+
+    const { chapterId, lessonId } =
+      await this.categoriesServices.insert(newCategoryDTO);
+
+    console.log(chapterId, lessonId)
+
     const newQuestionsDTO: NewQuestionDTO[] = questions.map((question) => ({
       subject: subject,
-      chapter: question.chapter,
-      lesson: question.lesson,
+      chapterId: chapterId,
+      lessonId: lessonId,
       exerciseType: question.exerciseType,
       difficultyLevel: question.difficultyLevel,
       learningOutcomes: question.learningOutcomes,
@@ -31,15 +42,8 @@ export class ImporterUseCase {
       options: question.options,
     }));
 
-    const newCategoryDTO: NewCategoryDTO = {
-      subject: subject,
-      chapter: category.chapter,
-      lessons: category.lessons,
-    };
+    await this.questionsServices.insert(newQuestionsDTO);
 
-    return (
-      (await this.questionsServices.insert(newQuestionsDTO)) &&
-      (await this.categoriesServices.insert(newCategoryDTO))
-    );
+    return true;
   }
 }

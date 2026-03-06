@@ -1,4 +1,4 @@
-export interface LessonDataDTO {
+export interface newLessonDataDTO {
   name: string;
   exerciseTypes: string[];
   difficultyLevels: string[];
@@ -9,7 +9,16 @@ export interface LessonDataDTO {
 export interface NewCategoryDTO {
   subject: string;
   chapter: string;
-  lessons: LessonDataDTO[];
+  lessons: newLessonDataDTO[];
+}
+
+export interface LessonDataDTO {
+  id: string;
+  name: string;
+  exerciseTypes: string[];
+  difficultyLevels: string[];
+  learningOutcomes: string[];
+  questionTypes: string[];
 }
 
 export interface CategoriesResponseDTO {

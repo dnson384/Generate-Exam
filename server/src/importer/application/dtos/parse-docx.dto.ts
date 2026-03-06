@@ -15,8 +15,6 @@ export interface OptionsDataImporterDTO {
 }
 
 export interface NewQuestionImporterDTO {
-  chapter: string;
-  lesson: string;
   exerciseType: string;
   difficultyLevel: string;
   learningOutcomes: string[];

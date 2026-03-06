@@ -7,7 +7,9 @@ import { ICategoriesRepository } from 'src/categories/domain/repositories/catego
 export class CategoriesServices {
   constructor(private readonly repo: ICategoriesRepository) {}
 
-  async insert(category: NewCategoryDTO): Promise<boolean> {
+  async insert(
+    category: NewCategoryDTO,
+  ): Promise<{ chapterId: string; lessonId: string }> {
     const newCategoryEntity = new CategoryEntity({
       subject: category.subject,
       chapter: category.chapter,

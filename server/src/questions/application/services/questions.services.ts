@@ -11,8 +11,8 @@ export class QuestionsServices {
     const newQuestionsEntity: QuestionEntity[] = questions.map((question) => {
       return new QuestionEntity({
         subject: question.subject,
-        chapter: question.chapter,
-        lesson: question.lesson,
+        chapterId: question.chapterId,
+        lessonId: question.lessonId,
         exerciseType: question.exerciseType,
         difficultyLevel: question.difficultyLevel,
         learningOutcomes: question.learningOutcomes,

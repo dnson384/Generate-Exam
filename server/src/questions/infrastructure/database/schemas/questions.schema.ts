@@ -49,10 +49,10 @@ export class Questions {
   subject: string;
 
   @Prop({ required: true })
-  chapter: string;
+  chapterId: string;
 
   @Prop({ required: true })
-  lesson: string;
+  lessonId: string;
 
   @Prop({ required: true })
   exerciseType: string;

@@ -13,7 +13,14 @@ export class CategoriesUseCase {
         id: category.id!,
         subject: category.subject,
         chapter: category.chapter,
-        lessons: category.lessons,
+        lessons: category.lessons.map((lesson) => ({
+          id: lesson.id!,
+          name: lesson.name,
+          exerciseTypes: lesson.exerciseTypes,
+          difficultyLevels: lesson.difficultyLevels,
+          learningOutcomes: lesson.learningOutcomes,
+          questionTypes: lesson.questionTypes,
+        })),
       }),
     );
     return categoriesDTO;

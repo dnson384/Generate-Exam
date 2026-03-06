@@ -64,11 +64,7 @@ export class PandocParserService implements IFileParser {
       });
 
       let initialQuestionRes = (
-        chapter: string = '',
-        lesson: string = '',
       ): NewQuestionImporterDTO => ({
-        chapter: chapter,
-        lesson: lesson,
         exerciseType: '',
         difficultyLevel: '',
         learningOutcomes: [],
@@ -125,7 +121,7 @@ export class PandocParserService implements IFileParser {
 
           // Dạng bài
           if (level === 1) {
-            questionsRes.push(initialQuestionRes(chapter, lesson));
+            questionsRes.push(initialQuestionRes());
             questionsRes[questionsRes.length - 1].exerciseType = text;
             categoryRes.lessons[
               categoryRes.lessons.length - 1

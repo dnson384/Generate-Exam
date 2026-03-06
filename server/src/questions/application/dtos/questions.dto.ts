@@ -16,8 +16,8 @@ export interface OptionsDataDTO {
 
 export interface NewQuestionDTO {
   subject: string,
-  chapter: string;
-  lesson: string;
+  chapterId: string;
+  lessonId: string;
   exerciseType: string;
   difficultyLevel: string;
   learningOutcomes: string[];

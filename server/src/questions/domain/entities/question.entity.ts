@@ -17,8 +17,8 @@ export class OptionsData {
 export class QuestionEntity {
   id?: string;
   subject: string;
-  chapter: string;
-  lesson: string;
+  chapterId: string;
+  lessonId: string;
   exerciseType: string;
   difficultyLevel: string;
   learningOutcomes: string[];

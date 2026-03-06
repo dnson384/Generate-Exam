@@ -3,8 +3,10 @@ import { HydratedDocument, Types } from 'mongoose';
 
 export type CategoriesDocument = HydratedDocument<Categories>;
 
-@Schema()
-export class LessonData {
+@Schema({ _id: true })
+export class LessonDataSch {
+  _id: Types.ObjectId;
+
   @Prop({ required: true })
   name: string;
 
@@ -20,7 +22,7 @@ export class LessonData {
   @Prop({ type: [String], default: [] })
   questionTypes: string[];
 }
-const LessonDataSchema = SchemaFactory.createForClass(LessonData);
+const LessonDataSchema = SchemaFactory.createForClass(LessonDataSch);
 
 @Schema({ collection: 'Categories', timestamps: true })
 export class Categories {
@@ -31,6 +33,6 @@ export class Categories {
   chapter: string;
 
   @Prop({ type: [LessonDataSchema], default: [], required: true })
-  lessons: LessonData[];
+  lessons: LessonDataSch[];
 }
 export const CategoriesSchema = SchemaFactory.createForClass(Categories);

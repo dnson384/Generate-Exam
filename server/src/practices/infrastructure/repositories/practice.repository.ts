@@ -57,8 +57,8 @@ export class PracticeRepository implements IPracticeRepository {
         return a.exerciseType.localeCompare(b.exerciseType);
       }
 
-      if (a.lesson !== b.lesson) {
-        return a.lesson.localeCompare(b.lesson);
+      if (a.lessonId !== b.lessonId) {
+        return a.lessonId.localeCompare(b.lessonId);
       }
 
       const outcomeStrA = [...a.learningOutcomes].sort().join(' | ');

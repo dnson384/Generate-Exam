@@ -5,8 +5,8 @@ export class QuestionMapper {
   static toDomain(raw: QuestionsDocument): QuestionEntity {
     const entity = new QuestionEntity({
       id: raw._id.toString(),
-      chapter: raw.chapter,
-      lesson: raw.lesson,
+      chapterId: raw.chapterId,
+      lessonId: raw.lessonId,
       exerciseType: raw.exerciseType,
       difficultyLevel: raw.difficultyLevel,
       learningOutcomes: raw.learningOutcomes,
@@ -22,8 +22,8 @@ export class QuestionMapper {
   static toSchema(entity: QuestionEntity): Partial<Questions> {
     return {
       subject: entity.subject,
-      chapter: entity.chapter,
-      lesson: entity.lesson,
+      chapterId: entity.chapterId,
+      lessonId: entity.lessonId,
       exerciseType: entity.exerciseType,
       difficultyLevel: entity.difficultyLevel,
       learningOutcomes: entity.learningOutcomes,
