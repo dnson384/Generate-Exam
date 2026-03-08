@@ -4,6 +4,7 @@ import {
   CreateDraftPayloadEntity,
   DraftEntity,
   UpdateChaptersDraftPayloadEntity,
+  UpdateLessonsDraftPayloadEntity,
 } from "@/domain/entities/draft.entity";
 
 export class DraftRepositoryImpl implements IDraftRepository {
@@ -36,6 +37,16 @@ export class DraftRepositoryImpl implements IDraftRepository {
   ): Promise<boolean> {
     const { data } = await axios.put<boolean>(
       `${this.baseUrl}/draft/chapter`,
+      payload,
+    );
+    return data;
+  }
+
+  async updateLessons(
+    payload: UpdateLessonsDraftPayloadEntity,
+  ): Promise<boolean> {
+    const { data } = await axios.put<boolean>(
+      `${this.baseUrl}/draft/lesson`,
       payload,
     );
     return data;

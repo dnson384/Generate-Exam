@@ -1,8 +1,12 @@
 import { CreateDraftPayload } from "@/presentation/schemas/draft.schema";
 import { CreateDraftService } from "@/presentation/services/draft.service";
+import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export default function useStructure() {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [questionsCount, setQuestionsCount] = useState<number>(0);
   const [questionTypes, setQuestionTypes] = useState<Record<string, boolean>>({
     "Nhiều lựa chọn": true,
@@ -51,6 +55,10 @@ export default function useStructure() {
     };
 
     const draftId = await CreateDraftService(payload);
+
+    if (draftId) {
+      router.push(`${pathname}/${draftId}`);
+    }
   };
 
   useEffect(() => {
@@ -59,7 +67,7 @@ export default function useStructure() {
         setError(null);
       }
     }, 3000);
-    
+
     return () => clearTimeout(timer);
   }, [error]);
 

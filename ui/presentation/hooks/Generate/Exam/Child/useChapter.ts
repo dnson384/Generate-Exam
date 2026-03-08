@@ -1,21 +1,27 @@
 import { DraftEntity } from "@/domain/entities/draft.entity";
 import {
-  UpdateChapterDraftParam,
-  UpdateChaptersDraftPayload,
+  UpdateDraftParam,
+  UpdateLessonssDraftPayload,
 } from "@/presentation/schemas/draft.schema";
 import { getAllCategoriesService } from "@/presentation/services/category.service";
 import {
+  GenerateMatrix,
   GetDraft,
-  UpdateChapters,
+  UpdateLessons,
 } from "@/presentation/services/draft.service";
 import { useQueries } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function useChapter() {
+  const router = useRouter();
+
   const pathname = usePathname();
-  const draftId = pathname.split("/")[pathname.split("/").length - 1];
+  const pathnameSplited = pathname.split("/");
+
+  const draftId = pathnameSplited[pathnameSplited.length - 2];
+  const chapterId = pathnameSplited[pathnameSplited.length - 1];
 
   const initalDraftEntity: DraftEntity = {
     id: "",
@@ -42,9 +48,16 @@ export default function useChapter() {
     ],
   });
 
+  // Data
   const [draftQuery, categoriesQuery] = results;
   const draft = draftQuery.data ?? initalDraftEntity;
+
   const categories = categoriesQuery.data ?? [];
+  const currentChapter = categories.find(
+    (category) => category.id === chapterId,
+  );
+
+  // Error & UI
   const isLoading = draftQuery.isLoading || categoriesQuery.isLoading;
 
   const isError = draftQuery.isError;
@@ -58,83 +71,136 @@ export default function useChapter() {
     }
   }, [axiosError]);
 
-  // Handler
-  const [selectedChapters, setSelectedChapters] = useState<
-    UpdateChapterDraftParam[]
-  >([{ id: "", name: "" }]);
+  // Handlers
+  const newSelectedLesson = (): UpdateDraftParam => ({
+    id: "",
+    name: "",
+  });
+
+  const [selectedLessons, setSelectedLessons] = useState<UpdateDraftParam[]>([
+    newSelectedLesson(),
+  ]);
 
   useEffect(() => {
-    if (draft !== initalDraftEntity) {
-      setSelectedChapters(
-        Object.values(draft.content).map((value) => ({
-          id: value.id,
-          name: value.name,
+    const draftLessons = draft.content[chapterId]?.lessons;
+    if (draftLessons && Object.keys(draftLessons).length > 0) {
+      setSelectedLessons(
+        Object.values(draftLessons).map((lesson) => ({
+          id: lesson.id,
+          name: lesson.name,
         })),
       );
     }
-  }, [draft]);
+  }, [draft, chapterId]);
 
-  const handleChapterSelect = (
-    curId: string,
+  const handleLessonSelect = (
+    currentId: string,
     id: string,
     name: string,
     index: number,
   ) => {
-    setSelectedChapters((prev) => {
-      const newSelectedChapters = [...prev];
-      if (curId !== id) {
-        newSelectedChapters[index] = { id: id, name: name };
+    setSelectedLessons((prev) => {
+      const newSelectedLessons = [...prev];
+      if (currentId !== id) {
+        newSelectedLessons[index] = { id: id, name: name };
       }
-      return newSelectedChapters;
+      return newSelectedLessons;
     });
   };
 
-  const handleAddChapter = () => {
-    setSelectedChapters((prev) => [...prev, { id: "", name: "" }]);
+  const handleAddLesson = () => {
+    setSelectedLessons((prev) => [...prev, newSelectedLesson()]);
   };
 
   const handleContinueClick = async () => {
-    const payload: UpdateChaptersDraftPayload = {
+    if (!selectedLessons[0].id) {
+      return setErrorMessage("Vui lòng chọn nội dung");
+    }
+
+    const prevLessons = Object.keys(draft.content[chapterId]?.lessons);
+    if (!prevLessons) {
+      return setErrorMessage("Chương hiện tại chưa tồn tại trong bản nháp");
+    }
+
+    // Tiếp tục mà không thay đổi
+    const curChapterIndex = Object.keys(draft.content).findIndex(
+      (id) => chapterId === id,
+    );
+
+    const newChapterId = Object.keys(draft.content)[curChapterIndex + 1];
+
+    if (
+      selectedLessons.length ===
+        Object.keys(draft.content[chapterId]?.lessons).length &&
+      curChapterIndex <
+        Object.keys(draft.content[chapterId]?.lessons).length - 1
+    ) {
+      router.push(`${pathname.replace(chapterId, newChapterId)}`);
+    }
+
+    // Cập nhật nội dung
+    const payload: UpdateLessonssDraftPayload = {
       draftId: draft.id,
+      chapterId: chapterId,
       add: [],
       del: [],
     };
 
-    const prevChapters = Object.keys(draft.content);
-
-    // Thêm chương
-    selectedChapters.forEach((chapter) => {
-      if (!prevChapters.includes(chapter.id)) {
+    // Thêm bài
+    selectedLessons.forEach((chapter) => {
+      if (!prevLessons.includes(chapter.id)) {
         payload.add.push(chapter);
       }
     });
 
-    // Xoá chương
-    const selectedChaptersId = selectedChapters.map((chapter) => chapter.id);
-    prevChapters.forEach((chapterId) => {
-      if (!selectedChaptersId.includes(chapterId)) {
+    // Xoá bài
+    const selectedLessonsId = selectedLessons.map((chapter) => chapter.id);
+    prevLessons.forEach((chapterId) => {
+      if (!selectedLessonsId.includes(chapterId)) {
         payload.del.push(chapterId);
       }
     });
 
-    if (payload.add.length === 0 && payload.del.length === 0) {
-      console.log("Chưa có thay đổi");
-      return;
+    let response;
+    let isGenerated = false;
+
+    response = await UpdateLessons(payload);
+
+    if (curChapterIndex === Object.keys(draft.content).length - 1) {
+      response = await GenerateMatrix(draftId);
+      if (response) isGenerated = true;
     }
 
-    const response = await UpdateChapters(payload);
+    if (response && !isGenerated) {
+      router.push(`${pathname.replace(chapterId, newChapterId)}`);
+    } else if (response && isGenerated) {
+      console.log("generated");
+    }
   };
 
+  useEffect(() => {
+    if (errorMessage !== null) {
+      const timer = setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+
   return {
+    // Data
+    currentChapter,
     draft,
-    categories,
+    // Error & UI
     isLoading,
     isError,
     errorMessage,
-    selectedChapters,
-    setSelectedChapters,
-    handleChapterSelect,
-    handleAddChapter,
+    // Handlers
+    selectedLessons,
+    setSelectedLessons,
+    handleLessonSelect,
+    handleAddLesson,
     handleContinueClick,
   };
 }

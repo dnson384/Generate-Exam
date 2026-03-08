@@ -16,7 +16,7 @@ interface ChapterBlockProps {
   handleAddChapter: () => void;
 }
 
-export default function ChapterBlock({
+export default function ChapterExamBlock({
   currentChapter,
   selectedChapters,
   index,
@@ -44,8 +44,12 @@ export default function ChapterBlock({
           setSearch(value);
           setIsOpen(true);
           if (value.trim().length === 0) {
-            setSelectedChapters((prev) => prev.filter((_, i) => i !== index));
-            setIsOpen(false);
+            if (selectedChapters.length > 1) {
+              setSelectedChapters((prev) => prev.filter((_, i) => i !== index));
+              setIsOpen(false);
+            } else {
+              setSelectedChapters([{ id: "", name: "" }]);
+            }
           }
         }}
         onSelect={(id: string, name: string, index: number) => {

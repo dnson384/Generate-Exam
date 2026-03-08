@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   CreateDraftPayload,
   UpdateChaptersDraftPayload,
+  UpdateLessonssDraftPayload,
 } from "../schemas/draft.schema";
 import { DraftEntity } from "@/domain/entities/draft.entity";
 
@@ -25,5 +26,18 @@ export async function UpdateChapters(payload: UpdateChaptersDraftPayload) {
     `/api/draft/update/chapter`,
     payload,
   );
-  return response.data
+  return response.data;
+}
+
+export async function UpdateLessons(payload: UpdateLessonssDraftPayload) {
+  const response = await axios.put<DraftEntity>(
+    `/api/draft/update/lesson`,
+    payload,
+  );
+  return response.data;
+}
+
+export async function GenerateMatrix(paylaod: any) {
+  console.log(paylaod);
+  return true;
 }

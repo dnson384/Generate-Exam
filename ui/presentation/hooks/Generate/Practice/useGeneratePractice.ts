@@ -119,7 +119,6 @@ export default function useGeneratePractice() {
       setError("Chương chưa được chọn");
       return;
     }
-    console.log(selectedLessons);
 
     const lessonsError = selectedLessons.some((lesson) => {
       if (lesson.name.trim().length === 0) {

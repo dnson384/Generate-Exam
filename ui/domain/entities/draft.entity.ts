@@ -33,8 +33,20 @@ export interface DraftEntity {
   expiredAt?: Date;
 }
 
+export interface UpdateDraftParamEntity {
+  id: string;
+  name: string;
+}
+
 export interface UpdateChaptersDraftPayloadEntity {
   draftId: string;
-  add: Array<string>;
+  add: UpdateDraftParamEntity[];
+  del: Array<string>;
+}
+
+export interface UpdateLessonsDraftPayloadEntity {
+  draftId: string;
+  chapterId: string;
+  add: UpdateDraftParamEntity[];
   del: Array<string>;
 }
