@@ -5,4 +5,6 @@ export abstract class ICategoriesRepository {
     category: CategoryEntity,
   ): Promise<{ chapterId: string; lessonId: string }>;
   abstract getAll(): Promise<CategoryEntity[]>;
+  abstract getById(chapterId: string): Promise<CategoryEntity>;
+  abstract getByIds(chapterIds: string[]): Promise<CategoryEntity[]>;
 }

@@ -17,4 +17,8 @@ export class CategoriesServices {
     });
     return await this.repo.saveCategory(newCategoryEntity);
   }
+
+  async getByIds(chapterIds: string[]): Promise<CategoryEntity[]> {
+    return await this.repo.getByIds(chapterIds);
+  }
 }

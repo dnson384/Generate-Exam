@@ -1,9 +1,9 @@
 export interface newLessonDataDTO {
   name: string;
-  exerciseTypes: string[];
-  difficultyLevels: string[];
-  learningOutcomes: string[];
-  questionTypes: string[];
+  exerciseTypes:  { [name: string]: number }
+  difficultyLevels:  { [name: string]: number }
+  learningOutcomes:  { [name: string]: number }
+  questionTypes:  { [name: string]: number }
 }
 
 export interface NewCategoryDTO {
@@ -15,10 +15,10 @@ export interface NewCategoryDTO {
 export interface LessonDataDTO {
   id: string;
   name: string;
-  exerciseTypes: string[];
-  difficultyLevels: string[];
-  learningOutcomes: string[];
-  questionTypes: string[];
+  exerciseTypes:  { [name: string]: number }
+  difficultyLevels:  { [name: string]: number }
+  learningOutcomes:  { [name: string]: number }
+  questionTypes:  { [name: string]: number }
 }
 
 export interface CategoriesResponseDTO {

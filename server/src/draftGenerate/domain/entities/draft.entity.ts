@@ -70,3 +70,14 @@ export class UpdateLessonsEntity {
     Object.assign(this, props);
   }
 }
+
+export class UpdateMatrixEntity {
+  draftId: string;
+  chapterId: string;
+  lessonId: string;
+  matrix: { [excerciseType: string]: { [level: string]: number } };
+
+  constructor(props: Partial<UpdateMatrixEntity>) {
+    Object.assign(this, props);
+  }
+}

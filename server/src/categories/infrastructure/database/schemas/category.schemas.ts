@@ -10,17 +10,17 @@ export class LessonDataSch {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ type: [String], default: [] })
-  exerciseTypes: string[];
+  @Prop({ type: Object, default: {} })
+  exerciseTypes: Record<string, number>;
 
-  @Prop({ type: [String], default: [] })
-  difficultyLevels: string[];
+  @Prop({ type: Object, default: {} })
+  difficultyLevels: Record<string, number>;
 
-  @Prop({ type: [String], default: [] })
-  learningOutcomes: string[];
+  @Prop({ type: Object, default: {} })
+  learningOutcomes: Record<string, number>;
 
-  @Prop({ type: [String], default: [] })
-  questionTypes: string[];
+  @Prop({ type: Object, default: {} })
+  questionTypes: Record<string, number>;
 }
 const LessonDataSchema = SchemaFactory.createForClass(LessonDataSch);
 

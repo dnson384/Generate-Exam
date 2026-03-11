@@ -63,8 +63,7 @@ export class PandocParserService implements IFileParser {
         },
       });
 
-      let initialQuestionRes = (
-      ): NewQuestionImporterDTO => ({
+      let initialQuestionRes = (): NewQuestionImporterDTO => ({
         exerciseType: '',
         difficultyLevel: '',
         learningOutcomes: [],
@@ -81,10 +80,10 @@ export class PandocParserService implements IFileParser {
 
       let initialLessonData = (name: string): LessonDataImporterDTO => ({
         name: name,
-        exerciseTypes: [],
-        difficultyLevels: [],
-        learningOutcomes: [],
-        questionTypes: [],
+        exerciseTypes: {},
+        difficultyLevels: {},
+        learningOutcomes: {},
+        questionTypes: {},
       });
 
       let chapter: string = '';
@@ -123,28 +122,75 @@ export class PandocParserService implements IFileParser {
           if (level === 1) {
             questionsRes.push(initialQuestionRes());
             questionsRes[questionsRes.length - 1].exerciseType = text;
-            categoryRes.lessons[
-              categoryRes.lessons.length - 1
-            ].exerciseTypes.push(text);
+
+            let exerciseTypeCount = 1;
+            const exerciseTypes =
+              categoryRes.lessons[categoryRes.lessons.length - 1].exerciseTypes;
+
+            if (Object.keys(exerciseTypes).includes(text)) {
+              exerciseTypeCount = exerciseTypes[text] + 1;
+            } else {
+              exerciseTypeCount = 1;
+            }
+
+            categoryRes.lessons[categoryRes.lessons.length - 1].exerciseTypes[
+              text
+            ] = exerciseTypeCount;
           }
           // Độ khó
           else if (level === 2) {
             questionsRes[questionsRes.length - 1].difficultyLevel = text;
-            categoryRes.lessons[
-              categoryRes.lessons.length - 1
-            ].difficultyLevels.push(text);
+
+            let difficultyLevelCount = 1;
+            const difficultyLevels =
+              categoryRes.lessons[categoryRes.lessons.length - 1]
+                .difficultyLevels;
+
+            if (Object.keys(difficultyLevels).includes(text)) {
+              difficultyLevelCount = difficultyLevels[text] + 1;
+            } else {
+              difficultyLevelCount = 1;
+            }
+
+            categoryRes.lessons[categoryRes.lessons.length - 1].difficultyLevels[
+              text
+            ] = difficultyLevelCount;
           }
           // Yêu cầu cần đạt
           else if (level === 3) {
             questionsRes[questionsRes.length - 1].learningOutcomes.push(text);
+
+            let learningOutcomeCount = 1;
+            const learningOutcomes =
+              categoryRes.lessons[categoryRes.lessons.length - 1]
+                .learningOutcomes;
+
+            if (Object.keys(learningOutcomes).includes(text)) {
+              learningOutcomeCount = learningOutcomes[text] + 1;
+            } else {
+              learningOutcomeCount = 1;
+            }
+
             categoryRes.lessons[
               categoryRes.lessons.length - 1
-            ].learningOutcomes.push(text);
+            ].learningOutcomes[text] = learningOutcomeCount;
           } else if (level === 4) {
             questionsRes[questionsRes.length - 1].questionType = text;
+
+            let questionTypeCount = 1;
+            const questionTypes =
+              categoryRes.lessons[categoryRes.lessons.length - 1]
+                .questionTypes;
+
+            if (Object.keys(questionTypes).includes(text)) {
+              questionTypeCount = questionTypes[text] + 1;
+            } else {
+              questionTypeCount = 1;
+            }
+
             categoryRes.lessons[
               categoryRes.lessons.length - 1
-            ].questionTypes.push(text);
+            ].questionTypes[text] = questionTypeCount;
           }
         }
         // Question
@@ -170,20 +216,6 @@ export class PandocParserService implements IFileParser {
       });
 
       if (questionsRes.length > 0) {
-        const curLesson = categoryRes.lessons.length - 1;
-        categoryRes.lessons[curLesson].exerciseTypes = Array.from(
-          new Set(categoryRes.lessons[curLesson].exerciseTypes),
-        );
-        categoryRes.lessons[curLesson].difficultyLevels = Array.from(
-          new Set(categoryRes.lessons[curLesson].difficultyLevels),
-        );
-        categoryRes.lessons[curLesson].learningOutcomes = Array.from(
-          new Set(categoryRes.lessons[curLesson].learningOutcomes),
-        );
-        categoryRes.lessons[curLesson].questionTypes = Array.from(
-          new Set(categoryRes.lessons[curLesson].questionTypes),
-        );
-
         return { questions: questionsRes, category: categoryRes };
       } else {
         throw Error('File rỗng');

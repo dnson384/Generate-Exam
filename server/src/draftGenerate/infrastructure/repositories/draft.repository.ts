@@ -7,6 +7,7 @@ import {
   DraftEntity,
   UpdateChaptersEntity,
   UpdateLessonsEntity,
+  UpdateMatrixEntity,
 } from 'src/draftGenerate/domain/entities/draft.entity';
 import { DraftMapper } from '../mappers/draft.mapper';
 
@@ -112,5 +113,24 @@ export class DraftsRepository implements IDraftsRepository {
     );
 
     return result.modifiedCount > 0;
+  }
+
+  async updateMatrix(payload: UpdateMatrixEntity[]): Promise<boolean> {
+    const query = payload.map((item) => ({
+      updateOne: {
+        filter: {
+          _id: new Types.ObjectId(item.draftId),
+        },
+        update: {
+          $set: {
+            [`content.${item.chapterId}.lessons.${item.lessonId}.matrix`]:
+              item.matrix,
+          },
+        },
+      },
+    }));
+
+    await this.draftModel.bulkWrite(query);
+    return true;
   }
 }

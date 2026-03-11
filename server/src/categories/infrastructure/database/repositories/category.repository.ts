@@ -57,12 +57,26 @@ export class CategoriesRepository implements ICategoriesRepository {
     return categoriesDomain;
   }
 
-  async getById(cateId: string): Promise<CategoryEntity> {
-    const category = await this.categoriesModel.findById(cateId);
+  async getById(chapterId: string): Promise<CategoryEntity> {
+    const category = await this.categoriesModel.findById(chapterId);
 
     if (!category) throw new NotFoundException('Không tồn tại chương này');
 
     const categoryDomain = CategoryMapper.toDomain(category);
     return categoryDomain;
+  }
+
+  async getByIds(chapterIds: string[]): Promise<CategoryEntity[]> {
+    const categories = await this.categoriesModel.find({
+      _id: { $in: chapterIds },
+    });
+
+    if (!categories || categories.length === 0)
+      throw new NotFoundException('Không tồn tại chương này');
+
+    const categoriesDomain = categories.map((category) =>
+      CategoryMapper.toDomain(category),
+    );
+    return categoriesDomain;
   }
 }

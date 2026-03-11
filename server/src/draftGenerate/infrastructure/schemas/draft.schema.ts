@@ -14,7 +14,7 @@ export class LessonDraftSch {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ type: Map, of: SchemaTypes.Mixed, default: {} })
+  @Prop({ type: Object, default: {} })
   matrix: Record<string, Record<string, number>>;
 
   @Prop({ type: Map, of: SchemaTypes.Mixed, default: {} })

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { DraftsUsecase } from '../application/draft.usecase';
 import type {
   CreateDraftPayload,
@@ -51,5 +51,10 @@ export class DraftController {
     };
 
     return await this.usecase.updateLessons(dto);
+  }
+
+  @Put("generate-matrix")
+  async generateMatrix(@Query('draftId') draftId: string) {
+    return await this.usecase.generateMatrix(draftId)
   }
 }
