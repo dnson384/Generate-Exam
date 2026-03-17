@@ -30,8 +30,8 @@ export class PracticeRepositoryImpl implements IPracticeRepository {
     return data;
   }
 
-  async exportWordFile(payload: ExportPayload): Promise<any> {
-    const { data } = await axios.post<any>(
+  async exportWordFile(payload: ExportPayload): Promise<Buffer> {
+    const { data } = await axios.post<Buffer>(
       `${this.baseUrl}/export/word`,
       payload,
       {

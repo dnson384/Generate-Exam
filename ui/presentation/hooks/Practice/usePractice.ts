@@ -1,10 +1,5 @@
-import { LessonExportPayload } from './../../schemas/exportPractice.schema';
+import { LessonExportPayload } from "../../schemas/export.schema";
 import { PracticeDetailEntity } from "@/domain/entities/practice.entity";
-import {
-  OptionsData,
-  QuestionContent,
-} from "@/domain/entities/question.entity";
-import { QuestionExportPayload } from "@/presentation/schemas/exportPractice.schema";
 import {
   exportWordFile,
   getPracticeDetailByIdService,

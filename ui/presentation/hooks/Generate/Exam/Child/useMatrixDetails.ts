@@ -1,14 +1,13 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import {
-  GenerateMatrixDetails,
-  GetDraft,
-} from "@/presentation/services/draft.service";
-import { useQuery } from "@tanstack/react-query";
-import { ChapterDraft, DraftEntity } from "@/domain/entities/draft.entity";
-import { AxiosError, isAxiosError } from "axios";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { usePathname, useRouter } from "next/navigation";
+import { AxiosError, isAxiosError } from "axios";
+
+import { ChapterDraft, DraftEntity } from "@/domain/entities/draft.entity";
+import { GetDraft } from "@/presentation/services/draft.service";
+import { GenerateExamService } from "@/presentation/services/exam.service";
 
 export default function useMatrixDetails() {
   const router = useRouter();
@@ -70,9 +69,9 @@ export default function useMatrixDetails() {
 
   const handleContinueClick = async () => {
     try {
-      const response = await GenerateMatrixDetails(draftId);
+      const response = await GenerateExamService(draftId);
       if (response) {
-        router.push(`${pathname}/details`);
+        router.replace(`/exam/${response}`);
       }
     } catch (err) {
       if (isAxiosError(err) && err.response?.data) {

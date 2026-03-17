@@ -1,5 +1,4 @@
 "use client";
-import { MatrixDetailsItems } from "@/domain/entities/draft.entity";
 import MatrixDetailsBlock from "@/presentation/components/Generate/Exam/MatrixDetailsBlock";
 import ContinueBtn from "@/presentation/components/layout/ContinueBtn";
 import NavBar from "@/presentation/components/layout/NavBar";

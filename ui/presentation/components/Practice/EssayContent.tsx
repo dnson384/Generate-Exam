@@ -3,7 +3,6 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 
 interface Data {
-  order: number;
   template: string;
   variables: {
     math: Record<string, string>;
@@ -11,12 +10,11 @@ interface Data {
   };
 }
 
-export default function QuestionContent({ order, template, variables }: Data) {
+export default function EssayContent({ template, variables }: Data) {
   const parts = template.split(/(<\w+>)/g);
 
   return (
-    <div className="leading-relaxed text-justify font-medium mb-1">
-      <span className="font-bold">Câu {order}. </span>
+    <>
       {parts.map((part, index) => {
         if (part.startsWith("<") && part.endsWith(">")) {
           const key = part.slice(1, -1);
@@ -31,7 +29,7 @@ export default function QuestionContent({ order, template, variables }: Data) {
                   width={0}
                   height={0}
                   sizes="100vw"
-                  className="w-auto mx-auto h-auto min-h-40 max-w-75 object-contain"
+                  className="w-auto h-auto max-w-40 object-contain"
                 />
               </span>
             );
@@ -58,6 +56,6 @@ export default function QuestionContent({ order, template, variables }: Data) {
 
         return <span key={index}>{part}</span>;
       })}
-    </div>
+    </>
   );
 }

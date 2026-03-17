@@ -89,7 +89,7 @@ export default function Upload() {
             }}
           />
         </div>
-        <div className="flex justify-center gap-2 bg-yellow-200 w-full px-4 py-2 rounded-full cursor-pointer">
+        <div className="flex justify-center gap-2 bg-blue-600 w-full px-4 py-2 rounded-full cursor-pointer">
           <input
             ref={hiddenFileInput}
             type="file"
@@ -102,7 +102,7 @@ export default function Upload() {
 
           <label
             htmlFor="docx-input"
-            className="text-blue-600 font-bold cursor-pointer"
+            className="text-white font-bold cursor-pointer"
           >
             Chọn tài liệu Word (.docx)
           </label>

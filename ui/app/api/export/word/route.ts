@@ -1,7 +1,5 @@
-import {
-  ExportPayload,
-} from "@/domain/entities/practice.entity";
-import { LessonExportPayload } from "./../../../../presentation/schemas/exportPractice.schema";
+import { ExportPayload } from "@/domain/entities/practice.entity";
+import { LessonExportPayload } from "../../../../presentation/schemas/export.schema";
 import { NextRequest, NextResponse } from "next/server";
 import { PracticeRepositoryImpl } from "@/infrastructure/repositories/practiceRepositoryImpl";
 import { ExportWordFileUsecase } from "@/application/usecases/practice/exportWordFile";

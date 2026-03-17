@@ -5,7 +5,7 @@ export async function generatePracticeService(
   payload: GeneratePayloadSchema,
 ): Promise<string> {
   const response = await axios.post<string>(
-    "/api/question/generatePractice",
+    "/api/practice/generate",
     payload,
   );
   return response.data;

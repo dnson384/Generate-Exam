@@ -22,3 +22,11 @@ export const LessonExportPayload = z.record(
 
 export type QuestionExportPayload = z.infer<typeof QuestionExportPayload>;
 export type LessonExportPayload = z.infer<typeof LessonExportPayload>;
+
+export const ExamExportPayload = z.array(
+  z.object({
+    questionType: z.string(),
+    questionIds: z.array(z.string()),
+  }),
+);
+export type ExamExportPayload = z.infer<typeof ExamExportPayload>;
