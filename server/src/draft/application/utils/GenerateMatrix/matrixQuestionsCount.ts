@@ -1,4 +1,4 @@
-import { ChapterDraft } from 'src/draftGenerate/domain/entities/draft.entity';
+import { ChapterDraft } from 'src/draft/domain/entities/draft.entity';
 
 export default function matrixQuestionsCount(
   chapterData: ChapterDraft[],

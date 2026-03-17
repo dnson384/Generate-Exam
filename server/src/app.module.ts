@@ -10,7 +10,8 @@ import { join } from 'path';
 
 import { ImporterModule } from './importer/importer.module';
 import { ExporterModule } from './exporter/exporter.module';
-import { DraftModule } from './draftGenerate/drafts.module';
+import { DraftsModule } from './draft/drafts.module';
+import { ExamsModule } from './exams/exams.module';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { DraftModule } from './draftGenerate/drafts.module';
     }),
     ImporterModule,
     ExporterModule,
-    DraftModule,
+    DraftsModule,
+    ExamsModule,
   ],
 })
 export class AppModule {}

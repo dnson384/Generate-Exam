@@ -5,7 +5,7 @@ import {
 import {
   LessonDraft,
   MatrixDetailItem,
-} from 'src/draftGenerate/domain/entities/draft.entity';
+} from 'src/draft/domain/entities/draft.entity';
 
 export function generateMatrixDetailsUtil(
   categories: CategoryEntity[],

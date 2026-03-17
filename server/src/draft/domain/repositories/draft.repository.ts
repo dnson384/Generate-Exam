@@ -15,4 +15,5 @@ export abstract class IDraftsRepository {
   abstract updateMatrixDetails(
     payload: UpdateMatrixDetailsEntity[],
   ): Promise<boolean>;
+  abstract deleteDraft(draftId: string): Promise<boolean>;
 }

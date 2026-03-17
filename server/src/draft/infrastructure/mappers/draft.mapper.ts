@@ -2,7 +2,7 @@ import {
   ChapterDraft,
   DraftEntity,
   LessonDraft,
-} from 'src/draftGenerate/domain/entities/draft.entity';
+} from 'src/draft/domain/entities/draft.entity';
 import {
   DraftDocument,
   Drafts,

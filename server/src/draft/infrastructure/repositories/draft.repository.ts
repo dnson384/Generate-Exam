@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { IDraftsRepository } from 'src/draftGenerate/domain/repositories/draft.repository';
+import { IDraftsRepository } from 'src/draft/domain/repositories/draft.repository';
 import { DraftDocument, Drafts } from '../schemas/draft.schema';
 import { Model, Types } from 'mongoose';
 import {
@@ -9,7 +9,7 @@ import {
   UpdateLessonsEntity,
   UpdateMatrixDetailsEntity,
   UpdateMatrixEntity,
-} from 'src/draftGenerate/domain/entities/draft.entity';
+} from 'src/draft/domain/entities/draft.entity';
 import { DraftMapper } from '../mappers/draft.mapper';
 
 @Injectable()
@@ -170,7 +170,8 @@ export class DraftsRepository implements IDraftsRepository {
         },
         update: {
           $set: {
-            [`chapters.$[chapter].lessons.$[lesson].matrixDetails`]: item.matrixDetails,
+            [`chapters.$[chapter].lessons.$[lesson].matrixDetails`]:
+              item.matrixDetails,
           },
         },
         arrayFilters: [
@@ -181,6 +182,11 @@ export class DraftsRepository implements IDraftsRepository {
     }));
 
     await this.draftModel.bulkWrite(query);
+    return true;
+  }
+
+  async deleteDraft(draftId: string): Promise<boolean> {
+    await this.draftModel.deleteOne({ _id: draftId });
     return true;
   }
 }

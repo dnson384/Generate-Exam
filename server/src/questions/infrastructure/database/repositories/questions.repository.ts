@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   LessonPayloadEntity,
   QuestionEntity,
@@ -64,5 +64,16 @@ export class QuestionRepository implements IQuestionRepository {
       questionsId: resultDomain.map((question) => question.id!.toString()),
     };
     return await this.practicesService.insert(payload);
+  }
+
+  async findByLessonIds(lessonIds: string[]): Promise<QuestionEntity[]> {
+    const questionsSch = await this.QuestionModel.find({
+      lessonId: { $in: lessonIds },
+    });
+    if (questionsSch.length === 0) {
+      throw new NotFoundException('Không tìm thấy câu hỏi nào');
+    }
+
+    return questionsSch.map((q) => QuestionMapper.toDomain(q));
   }
 }
